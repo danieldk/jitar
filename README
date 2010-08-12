@@ -17,7 +17,7 @@ A model can be created from a corpus that includes part of speech
 tags, such as the Brown corpus. The model can be created easily with
 the training program:
 
-java org.langkit.tagger.cli.Train corpus lexicon ngrams
+java -cp dist/jitar.jar org.langkit.tagger.cli.Train corpus lexicon ngrams
 
 Where 'corpus' is the corpus to use for training. The 'lexicon'
 and 'ngrams' files will be created and form the model.
@@ -33,10 +33,12 @@ sentence per line), and will print the best scoring tag sequence to
 the standard output. For example:
 
 ---
-$ echo "The cat is on the mat ." | java org.langkit.tagger.cli.Tag \
-  lexicon ngrams
+$ echo "The cat is on the mat ." | java -cp dist/jitar.jar \
+  org.langkit.tagger.cli.Tag lexicon ngrams
 AT NN BEZ IN AT NN .
 ---
+
+A model based on the Brown corpus is included in models/brown.
 
 == Authors ==
 
