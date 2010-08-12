@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -14,3 +14,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package org.langkit.tagger.languagemodel;
+
+import org.langkit.tagger.data.TriGram;
+
+/**
+ * Classes that implement the <i>LanguageModel</i> interface provide the
+ * <i>triGramProb</i> method that estimates the probability of a trigram,
+ * P(t3|t1,t2).
+ * 
+ */
+public interface LanguageModel {
+	/**
+	 * Estimate the probability of a trigram, P(t3|t1,t2), and return
+	 * the logprob.
+	 * @param triGram
+	 * @return
+	 */
+	double triGramProb(TriGram triGram);
+}
