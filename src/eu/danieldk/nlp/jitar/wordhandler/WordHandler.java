@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,24 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.data.util;
+package eu.danieldk.nlp.jitar.wordhandler;
 
-import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Map.Entry;
+import java.util.Map;
 
 /**
- * This class implements a comparator for <i>Entry<String, Double></i> instances.
- * The order is descending on the entry value.
+ * Classes implementing the <i>wordHandler</i> interface provide the
+ * <i>tagProbs</i> method to estimate the probability of a word given
+ * a tag.
  */
-public class ProbEntryComparator implements Comparator<Entry<Integer, Double>>,
-		Serializable {
-	private static final long serialVersionUID = 20080720L;
-
-	public int compare(Entry<Integer, Double> e1, Entry<Integer, Double> e2) {
-		if (e1.getValue() == e2.getValue())
-			return e1.getKey().compareTo(e2.getKey());
-		
-		return e2.getValue().compareTo(e1.getValue());
-	}
+public interface WordHandler {
+	/**
+	 * Return the logprobs of <i>word</i>, given one or more tags.
+	 * @param word
+	 * @return
+	 */
+	Map<Integer, Double> tagProbs(String word);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.tagger;
+package eu.danieldk.nlp.jitar.tagger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,10 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.langkit.tagger.data.Model;
-import org.langkit.tagger.data.TriGram;
-import org.langkit.tagger.languagemodel.LanguageModel;
-import org.langkit.tagger.wordhandler.WordHandler;
+
+import eu.danieldk.nlp.jitar.data.Model;
+import eu.danieldk.nlp.jitar.data.TriGram;
+import eu.danieldk.nlp.jitar.languagemodel.LanguageModel;
+import eu.danieldk.nlp.jitar.wordhandler.WordHandler;
 
 /**
  * Instances of this class can be used to tag sequences using a Hidden

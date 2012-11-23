@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,20 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.wordhandler;
+package eu.danieldk.nlp.jitar.corpus;
 
-import java.util.Map;
+import java.util.List;
 
 /**
- * Classes implementing the <i>wordHandler</i> interface provide the
- * <i>tagProbs</i> method to estimate the probability of a word given
- * a tag.
+ * Classes implementing this interface can handle sentences, for instance
+ * those provided by a corpus reader.
+ * @param <WordType>
  */
-public interface WordHandler {
-	/**
-	 * Return the logprobs of <i>word</i>, given one or more tags.
-	 * @param word
-	 * @return
-	 */
-	Map<Integer, Double> tagProbs(String word);
+public interface CorpusSentenceHandler<WordType> {
+	public void handleSentence(List<WordType> sentence);
 }

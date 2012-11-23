@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.corpus;
+package eu.danieldk.nlp.jitar.corpus;
 
 import java.io.BufferedReader;
 import java.io.IOException;

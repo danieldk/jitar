@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.wordhandler;
+package eu.danieldk.nlp.jitar.wordhandler;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.langkit.tagger.data.UniGram;
+import eu.danieldk.nlp.jitar.data.UniGram;
 
 /**
  * The <i>KnownWordHandler</i> class estimates the probability of a word given

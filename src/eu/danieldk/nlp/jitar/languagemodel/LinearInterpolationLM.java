@@ -15,16 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.languagemodel;
+package eu.danieldk.nlp.jitar.languagemodel;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.langkit.tagger.data.BiGram;
-import org.langkit.tagger.data.TriGram;
-import org.langkit.tagger.data.UniGram;
+import eu.danieldk.nlp.jitar.data.BiGram;
+import eu.danieldk.nlp.jitar.data.TriGram;
+import eu.danieldk.nlp.jitar.data.UniGram;
 
 /**
  * This model estimates trigram probabilities using linear interpolation

@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,15 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.corpus;
+package eu.danieldk.nlp.jitar.corpus;
 
-import java.util.List;
-
-/**
- * Classes implementing this interface can handle sentences, for instance
- * those provided by a corpus reader.
- * @param <WordType>
- */
-public interface CorpusSentenceHandler<WordType> {
-	public void handleSentence(List<WordType> sentence);
+public class CorpusReaderException extends Exception {
+	public CorpusReaderException(String msg, CorpusReadError error) {
+		super(msg);
+		d_error = error;
+	}
+	
+	public CorpusReadError error() {
+		return d_error;
+	}
+	
+	public enum CorpusReadError { MISSING_TAG, ZERO_LENGTH_WORD }
+	
+	private static final long serialVersionUID = 2636057373916773934L;
+	private CorpusReadError d_error;
 }

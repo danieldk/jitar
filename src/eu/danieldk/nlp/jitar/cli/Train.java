@@ -1,5 +1,5 @@
 /*
- * Copyright 2008, 2009 Daniël de Kok
+ * Copyright 2008, 2009 Daniel de Kok
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.langkit.tagger.cli;
+package eu.danieldk.nlp.jitar.cli;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.langkit.tagger.corpus.BrownCorpusReader;
-import org.langkit.tagger.corpus.CorpusReader;
-import org.langkit.tagger.corpus.CorpusReaderException;
-import org.langkit.tagger.corpus.CorpusSentenceHandler;
-import org.langkit.tagger.corpus.TaggedWord;
+import eu.danieldk.nlp.jitar.corpus.BrownCorpusReader;
+import eu.danieldk.nlp.jitar.corpus.CorpusReader;
+import eu.danieldk.nlp.jitar.corpus.CorpusReaderException;
+import eu.danieldk.nlp.jitar.corpus.CorpusSentenceHandler;
+import eu.danieldk.nlp.jitar.corpus.TaggedWord;
 
 public class Train {
 	private static class TrainHandler implements CorpusSentenceHandler<TaggedWord> {
