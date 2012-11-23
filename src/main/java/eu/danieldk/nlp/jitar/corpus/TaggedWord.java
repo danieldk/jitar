@@ -28,11 +28,29 @@ public class TaggedWord {
 		d_word = word;
 		d_tag = tag;
 	}
-	
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this)
+      return true;
+
+    if (!(o instanceof TaggedWord))
+      return false;
+
+    TaggedWord other = (TaggedWord) o;
+
+    return other.d_word.equals(d_word) && other.d_tag.equals(d_tag);
+  }
+
 	public String tag() {
 		return d_tag;
 	}
-	
+
+  @Override
+  public String toString() {
+    return d_word + "/" + d_tag;
+  }
+
 	public String word() {
 		return d_word;
 	}
