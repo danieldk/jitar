@@ -27,7 +27,7 @@ public class CorpusReaderException extends Exception {
 		return d_error;
 	}
 	
-	public enum CorpusReadError { MISSING_TAG, ZERO_LENGTH_WORD }
+	public enum CorpusReadError { MISSING_TAG, ZERO_LENGTH_TAG, ZERO_LENGTH_WORD }
 	
 	private static final long serialVersionUID = 2636057373916773934L;
 	private CorpusReadError d_error;

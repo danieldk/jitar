@@ -49,7 +49,6 @@ public class TestBrownCorpusReader {
       Assert.fail("Could not parse corpus: " + e.getLocalizedMessage());
     }
 
-
     List<List<TaggedWord>> check = new ArrayList<List<TaggedWord>>(){{
       add(new ArrayList<TaggedWord>(){{
         add(new TaggedWord("<START>", "<START>"));
@@ -67,5 +66,44 @@ public class TestBrownCorpusReader {
     d_corpusReader.removeHandler(handler);
 
     Assert.assertEquals("Parsed corpus is inaccurate.", check, handler.getSentences());
+  }
+
+  @Test(expected = CorpusReaderException.class)
+  public void testParseEmptyTag() throws CorpusReaderException {
+
+    InputStream is = new ByteArrayInputStream("A/AT b/BT c/".getBytes());
+    BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
+
+    try {
+      d_corpusReader.parse(rdr);
+    } catch (IOException e) {
+      Assert.fail("IO error in corpus mock");
+    }
+  }
+
+  @Test(expected = CorpusReaderException.class)
+  public void testParseEmptyWord() throws CorpusReaderException {
+
+    InputStream is = new ByteArrayInputStream("A/AT b/BT /CT".getBytes());
+    BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
+
+    try {
+      d_corpusReader.parse(rdr);
+    } catch (IOException e) {
+      Assert.fail("IO error in corpus mock");
+    }
+  }
+
+  @Test(expected = CorpusReaderException.class)
+  public void testParseMissingTag() throws CorpusReaderException {
+
+    InputStream is = new ByteArrayInputStream("A/AT b/BT c".getBytes());
+    BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
+
+    try {
+      d_corpusReader.parse(rdr);
+    } catch (IOException e) {
+      Assert.fail("IO error in corpus mock");
+    }
   }
 }

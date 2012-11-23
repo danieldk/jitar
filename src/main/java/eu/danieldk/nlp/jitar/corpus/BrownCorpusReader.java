@@ -63,7 +63,11 @@ public class BrownCorpusReader extends CorpusReader<TaggedWord> {
         if (word.length() == 0)
           throw new CorpusReaderException("Zero-length word in '" +
               wordTag + "'", CorpusReadError.ZERO_LENGTH_WORD);
-        
+
+        if (tag.length() == 0)
+          throw new CorpusReaderException("Zero-length tag in '" +
+              wordTag + "'", CorpusReadError.ZERO_LENGTH_TAG);
+
         if (d_decapitalizeFirstWord && i == 0)
           word = replaceCharAt(word, 0, Character.toLowerCase(word.charAt(0)));
         
