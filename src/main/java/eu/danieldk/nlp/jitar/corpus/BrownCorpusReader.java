@@ -36,8 +36,7 @@ public class BrownCorpusReader extends CorpusReader<TaggedWord> {
   }
     
   public void parse(BufferedReader reader) throws IOException, CorpusReaderException {
-    String line = null;
-    
+    String line;
     while ((line = reader.readLine()) != null) {
       line = line.trim();
       

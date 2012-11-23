@@ -40,8 +40,8 @@ public class SuffixWordHandler implements WordHandler {
 	/**
 	 * Construct a suffix word handler from a lexicon and the over unigram
 	 * frequency list for the corpus.
-	 * @param lexicon
-	 * @param uniGrams
+	 * @param lexicon The lexicon.
+	 * @param uniGrams Unigram tag frequencies.
 	 * @param upperMaxFreq Uppercase words with a frequency lower than or equal
 	 * 	to this value will be used for suffix training.
 	 * @param lowerMaxFreq Lowercase words with a frequency lower than or equal
@@ -71,7 +71,7 @@ public class SuffixWordHandler implements WordHandler {
 				wordFreq += tagEntry.getValue();
 
 			// Select the correct tree.
-			WordSuffixTree suffixTree = null;
+			WordSuffixTree suffixTree;
 			if (s_cardinalPattern.matcher(word).matches()) {
 				if (wordFreq > cardinalMaxFreq)
 					continue;
@@ -94,7 +94,7 @@ public class SuffixWordHandler implements WordHandler {
 	}
 	
 	public Map<Integer, Double> tagProbs(String word) {
-		WordSuffixTree suffixTree = null;
+		WordSuffixTree suffixTree;
 		if (s_cardinalPattern.matcher(word).matches())
 			suffixTree = d_cardinalSuffixTrie;
 		else {

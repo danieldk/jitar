@@ -47,14 +47,14 @@ public abstract class CorpusReader<WordType> {
 		
 	/**
 	 * Parse a corpus, passing sentences to registered corpus handlers.
-	 * @param reader
+	 * @param reader Reader providing the data to parse.
 	 * @throws IOException
 	 */
 	abstract public void parse(BufferedReader reader) throws IOException, CorpusReaderException;
 	
 	/**
 	 * This method adds a sentence handler to the corpus reader.
-	 * @param sentenceHandlers
+	 * @param sentenceHandler The handler to add.
 	 */
 	public void addHandler(CorpusSentenceHandler<WordType> sentenceHandler) {
 		d_sentenceHandlers.add(sentenceHandler);
@@ -62,7 +62,7 @@ public abstract class CorpusReader<WordType> {
 	
 	/**
 	 * This method adds a sentence handler from the corpus reader.
-	 * @param sentenceHandler
+	 * @param sentenceHandler The handler to remove.
 	 */
 	public void removeHandler(CorpusSentenceHandler<WordType> sentenceHandler) {
 		d_sentenceHandlers.remove(sentenceHandler);

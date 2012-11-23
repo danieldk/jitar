@@ -99,7 +99,7 @@ class WordSuffixTree {
 		}
 	}
 	
-	private final Map<Integer, Double> bayesianInversion(Map<Integer, Double> tagProbs) {
+	private Map<Integer, Double> bayesianInversion(Map<Integer, Double> tagProbs) {
 		Map<Integer, Double> inverseTagProbs = new HashMap<Integer, Double>();
 		
 		for (Entry<Integer, Double> tagProb: tagProbs.entrySet()) {

@@ -26,9 +26,9 @@ import java.util.Map;
  */
 public interface WordHandler {
 	/**
-	 * Return the logprobs of <i>word</i>, given one or more tags.
-	 * @param word
-	 * @return
+	 * Return the logprobs of <i>word</i>, given one or more tags (log(p(w|t)).
+	 * @param word The word.
+	 * @return <i>log(p(w|t))</i> for all possible tags <i>t</i> for that word.
 	 */
 	Map<Integer, Double> tagProbs(String word);
 }

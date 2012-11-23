@@ -30,7 +30,7 @@ public class ProbEntryComparator implements Comparator<Entry<Integer, Double>>,
 	private static final long serialVersionUID = 20080720L;
 
 	public int compare(Entry<Integer, Double> e1, Entry<Integer, Double> e2) {
-		if (e1.getValue() == e2.getValue())
+		if (e1.getValue().equals(e2.getValue()))
 			return e1.getKey().compareTo(e2.getKey());
 		
 		return e2.getValue().compareTo(e1.getValue());

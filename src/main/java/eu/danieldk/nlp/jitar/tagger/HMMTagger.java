@@ -67,7 +67,7 @@ public class HMMTagger {
 
 		/**
 		 * Return the sequence.
-		 * @return
+		 * @return Sequence of part-of-speech tags.
 		 */
 		public List<String> sequence() {
 			List<String> tagSequence = new ArrayList<String>(d_sequence.size());
@@ -81,7 +81,7 @@ public class HMMTagger {
 
 		/**
 		 * Return the probability of the sequence in log space.
-		 * @return
+		 * @return log(p(w1..n))
 		 */
 		public double logProb() {
 			return d_logProb;
@@ -110,8 +110,8 @@ public class HMMTagger {
 	
 	/**
 	 * Extract the most probable sequence from a tag matrix.
-	 * @param tagMatrix
-	 * @return
+	 * @param tagMatrix The Viterbi matrix.
+	 * @return The tag sequence with the highest probability.
 	 */
 	public static Sequence highestProbabilitySequence(List<List<TagMatrixEntry>> tagMatrix,
 			Model model)
@@ -133,11 +133,14 @@ public class HMMTagger {
 				}
 			}
 		}
-		
+
+    // We should always have a final state with some probability.
+    assert tail != null;
+
 		List<Integer> tagSequence = new ArrayList<Integer>(tagMatrix.size());
 		
 		for (int i = 0; i < tagMatrix.size(); ++i) {
-			tagSequence.add(tail.tag);			
+			tagSequence.add(tail.tag);
 			
 			if (beforeTail != null) {
 				TagMatrixEntry tmp = tail.bps.get(beforeTail);
@@ -155,7 +158,7 @@ public class HMMTagger {
 	 * Tag a sentence.
 	 * @param sentence The actual sentence with two start markers, and preferably
 	 * 	one end marker.
-	 * @return
+	 * @return The Viterbi matrix.
 	 */
 	public List<List<TagMatrixEntry>> viterbi(List<String> sentence) {
 		List<List<TagMatrixEntry>> tagMatrix = new ArrayList<List<TagMatrixEntry>>(sentence.size());

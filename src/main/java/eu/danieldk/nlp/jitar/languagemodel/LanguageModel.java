@@ -22,15 +22,15 @@ import eu.danieldk.nlp.jitar.data.TriGram;
 /**
  * Classes that implement the <i>LanguageModel</i> interface provide the
  * <i>triGramProb</i> method that estimates the probability of a trigram,
- * P(t3|t1,t2).
+ * p(t3|t1,t2).
  * 
  */
 public interface LanguageModel {
 	/**
-	 * Estimate the probability of a trigram, P(t3|t1,t2), and return
+	 * Estimate the probability of a trigram, p(t3|t1,t2), and return
 	 * the logprob.
-	 * @param triGram
-	 * @return
+	 * @param triGram t1,t2,t3
+	 * @return log(p(t3|t1,t2))
 	 */
 	double triGramProb(TriGram triGram);
 }

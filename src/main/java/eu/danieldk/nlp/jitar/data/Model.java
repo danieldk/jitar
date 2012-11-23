@@ -62,7 +62,7 @@ public class Model {
 
 	/**
 	 * Returns the model bigram frequencies.
-	 * @return
+	 * @return Bigram frequencies.
 	 */
 	public Map<BiGram, Integer> biGrams() {
 		return d_biGramFreqs;
@@ -70,7 +70,7 @@ public class Model {
 
 	/**
 	 * Returns the model word/tag frequencies.
-	 * @return
+	 * @return Word/tag frequencies.
 	 */
 	public Map<String, Map<Integer, Integer>> lexicon() {
 		return d_wordTagFreqs;
@@ -124,7 +124,7 @@ public class Model {
 		Map<TriGram, Integer> triGramFreqs = new HashMap<TriGram, Integer>();
 	
 		int tagNumber = 0;
-		String line = null;
+		String line;
 		while ((line = reader.readLine()) != null) {
 			String[] lineParts = line.split("\\s+");
 	
@@ -153,7 +153,7 @@ public class Model {
 	throws IOException {
 		Map<String, Map<Integer, Integer>> wordTagFreqs = new HashMap<String, Map<Integer, Integer>>();
 	
-		String line = null;
+		String line;
 		while ((line = reader.readLine()) != null) {
 			String[] lineParts = line.split("\\s+");
 			String word = lineParts[0];
@@ -176,7 +176,7 @@ public class Model {
 
 	/**
 	 * Returns the model trigram frequencies.
-	 * @return
+	 * @return Trigram frequencies.
 	 */
 	public Map<TriGram, Integer> triGrams() {
 		return d_triGramFreqs;
@@ -184,7 +184,7 @@ public class Model {
 	
 	/**
 	 * Returns the model unigram frequencies.
-	 * @return
+	 * @return Unigram (tag) frequencies.
 	 */
 	public Map<UniGram, Integer> uniGrams() {
 		return d_uniGramFreqs;

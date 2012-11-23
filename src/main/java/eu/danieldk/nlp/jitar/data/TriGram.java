@@ -50,8 +50,7 @@ public class TriGram {
 	
 	@Override
 	public int hashCode() {
-		int seed = 0;
-		seed = d_t1;
+		int seed = d_t1;
 		seed ^= d_t2 + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 		seed ^= d_t3 + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 		return seed;

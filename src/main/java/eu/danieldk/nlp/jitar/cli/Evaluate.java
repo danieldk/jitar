@@ -99,9 +99,6 @@ public class Evaluate {
 		}
 	}
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		if (args.length != 3) {
 			System.out.println("Evaluate lexicon ngrams corpus");

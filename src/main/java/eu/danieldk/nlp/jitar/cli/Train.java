@@ -154,9 +154,6 @@ public class Train {
 		writer.flush();
 	}
 		
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		if (args.length != 3) {
 			System.out.println("Train corpus lexicon ngrams");

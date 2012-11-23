@@ -41,9 +41,9 @@ public class LinearInterpolationLM implements LanguageModel {
 	private final Map<TriGram, Double> d_triGramCache;
 	
 	/**
-	 * @param uniGramFreqs
-	 * @param biGramFreqs
-	 * @param triGramFreqs
+	 * @param uniGramFreqs 1-gram frequencies
+	 * @param biGramFreqs 2-gram frequencies
+	 * @param triGramFreqs 3-gram frequencies
 	 */
 	public LinearInterpolationLM(Map<UniGram, Integer> uniGramFreqs,
 			Map<BiGram, Integer> biGramFreqs,
