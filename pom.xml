@@ -6,8 +6,34 @@
   <name>Jitar part-of-speech tagger</name>
   <description>Jitar is an HMM trigram part-of-speech tagger</description>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
     <plugins>
+      <plugin>
+        <groupId>org.scala-tools</groupId>
+        <artifactId>maven-scala-plugin</artifactId>
+        <version>2.15.2</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
@@ -19,6 +45,11 @@
     </plugins>
   </build>
     <dependencies>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-library</artifactId>
+        <version>2.9.2</version>
+      </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
