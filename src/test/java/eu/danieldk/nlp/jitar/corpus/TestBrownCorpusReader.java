@@ -21,28 +21,31 @@ public class TestBrownCorpusReader {
 
     private List<List<TaggedWord>> d_sentences = new ArrayList<List<TaggedWord>>();
   }
-  private CorpusReader<TaggedWord> d_corpusReader;
 
-  @Before
-  public void initialize() {
+  private static BrownCorpusReader createReader() {
+    return createReader(true);
+  }
+
+  private static BrownCorpusReader createReader(boolean decapFirstWord) {
     List<TaggedWord> startMarkers = new ArrayList<TaggedWord>();
     startMarkers.add(new TaggedWord("<START>", "<START>"));
     List<TaggedWord> endMarkers = new ArrayList<TaggedWord>();
     endMarkers.add(new TaggedWord("<END>", "<END>"));
 
-    d_corpusReader = new BrownCorpusReader(startMarkers, endMarkers, true);
+    return new BrownCorpusReader(startMarkers, endMarkers, decapFirstWord);
   }
 
   @Test
   public void testParse() {
     StoreHandler handler = new StoreHandler();
-    d_corpusReader.addHandler(handler);
+    CorpusReader<TaggedWord> corpusReader = createReader();
+    corpusReader.addHandler(handler);
 
     InputStream is = new ByteArrayInputStream("A/AT b/BT\nC/CT".getBytes());
     BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
     try {
-      d_corpusReader.parse(rdr);
+      corpusReader.parse(rdr);
     } catch (IOException e) {
       Assert.fail("IO error in corpus mock");
     } catch (CorpusReaderException e) {
@@ -63,21 +66,20 @@ public class TestBrownCorpusReader {
       }});
     }};
 
-    d_corpusReader.removeHandler(handler);
-
     Assert.assertEquals("Parsed corpus is inaccurate.", check, handler.getSentences());
   }
 
   @Test
   public void testParseWithSlash() {
     StoreHandler handler = new StoreHandler();
-    d_corpusReader.addHandler(handler);
+    BrownCorpusReader corpusReader = createReader();
+    corpusReader.addHandler(handler);
 
     InputStream is = new ByteArrayInputStream("A/a/AT".getBytes());
     BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
     try {
-      d_corpusReader.parse(rdr);
+      corpusReader.parse(rdr);
     } catch (IOException e) {
       Assert.fail("IO error in corpus mock");
     } catch (CorpusReaderException e) {
@@ -92,19 +94,18 @@ public class TestBrownCorpusReader {
       }});
     }};
 
-    d_corpusReader.removeHandler(handler);
-
     Assert.assertEquals("Parsed corpus is inaccurate.", check, handler.getSentences());
   }
 
   @Test(expected = CorpusReaderException.class)
   public void testParseEmptyTag() throws CorpusReaderException {
+    BrownCorpusReader corpusReader = createReader();
 
     InputStream is = new ByteArrayInputStream("A/AT b/BT c/".getBytes());
     BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
     try {
-      d_corpusReader.parse(rdr);
+      corpusReader.parse(rdr);
     } catch (IOException e) {
       Assert.fail("IO error in corpus mock");
     }
@@ -112,12 +113,13 @@ public class TestBrownCorpusReader {
 
   @Test(expected = CorpusReaderException.class)
   public void testParseEmptyWord() throws CorpusReaderException {
+    BrownCorpusReader corpusReader = createReader();
 
     InputStream is = new ByteArrayInputStream("A/AT b/BT /CT".getBytes());
     BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
     try {
-      d_corpusReader.parse(rdr);
+      corpusReader.parse(rdr);
     } catch (IOException e) {
       Assert.fail("IO error in corpus mock");
     }
@@ -125,14 +127,35 @@ public class TestBrownCorpusReader {
 
   @Test(expected = CorpusReaderException.class)
   public void testParseMissingTag() throws CorpusReaderException {
+    BrownCorpusReader corpusReader = createReader();
 
     InputStream is = new ByteArrayInputStream("A/AT b/BT c".getBytes());
     BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
     try {
-      d_corpusReader.parse(rdr);
+      corpusReader.parse(rdr);
     } catch (IOException e) {
       Assert.fail("IO error in corpus mock");
     }
+  }
+
+  @Test(expected = UnsupportedOperationException.class)
+  public void testParseReadOnly() {
+    BrownCorpusReader corpusReader = createReader();
+
+    InputStream is = new ByteArrayInputStream("A/AT b/BT".getBytes());
+    BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
+
+    StoreHandler handler = new StoreHandler();
+    corpusReader.addHandler(handler);
+
+    try {
+      corpusReader.parse(rdr);
+    } catch (IOException e) {
+      Assert.fail("IO error in corpus mock");
+    } catch (CorpusReaderException e) {
+      Assert.fail("Could not parse corpus: " + e.getLocalizedMessage());
+    }
+    handler.getSentences().get(0).add(new TaggedWord("foo", "BAR"));
   }
 }
