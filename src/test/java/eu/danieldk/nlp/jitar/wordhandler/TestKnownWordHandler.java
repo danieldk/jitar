@@ -23,6 +23,8 @@ public class TestKnownWordHandler {
 
 
     d_wordHandler = new KnownWordHandler(wordFreqs, uniFreqs);
+    d_wordHandlerWithFallback = new KnownWordHandler(wordFreqs, uniFreqs,
+        new SuffixWordHandler(wordFreqs, uniFreqs, 2, 5, 5, 5, 5));
   }
 
   @Test
@@ -40,5 +42,12 @@ public class TestKnownWordHandler {
         new HashMap<Integer, Double>(), d_wordHandler.tagProbs("unknown"));
   }
 
+  @Test
+  public void testUnknownWithFallback() {
+    Assert.assertNotEquals("Unknown word should give non-empty map with SuffixWordHandler fallback",
+        new HashMap<Integer, Double>(), d_wordHandlerWithFallback.tagProbs("unknown"));
+  }
+
   WordHandler d_wordHandler;
+  WordHandler d_wordHandlerWithFallback;
 }
