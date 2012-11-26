@@ -10,7 +10,6 @@ import org.junit.Test;
 
 public class TestBrownCorpusReader {
   private class StoreHandler implements CorpusSentenceHandler<TaggedWord> {
-    @Override
     public void handleSentence(List<TaggedWord> sentence) {
       d_sentences.add(sentence);
     }
