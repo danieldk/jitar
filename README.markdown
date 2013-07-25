@@ -46,7 +46,7 @@ A model based on the Brown corpus is included in models/brown.
 Authors
 -------
 
-Daniël de Kok &lt;<me@danieldk.org>&gt;
+Daniël de Kok &lt;<me@danieldk.eu>&gt;
 
 FAQ
 ---
@@ -59,10 +59,12 @@ FAQ
 
 - "Can I use Jitar, or parts thereof in closed-source software?"
 
-  No, Jitar is licensed under the Affero GNU General Public License.
-  Even use in a closed-source network application is disallowed.
+  Sure, as long as you follow the terms of the Apache License version
+  2.0, including section 4b.
 
-  A perpetual non-exclusive license for the use of Jitar in
-  proprietary software is available from the author.
+- "Do a really have to add a readable attribution notice to my product?"
+
+  Yes! If this is really a problem for you or your company, contact me
+  to see if we can make a special arrangement.
 
 [1] TnT - a statistical part-of-speech tagger, Thorsten Brants, 2000
