@@ -152,10 +152,12 @@ public class Evaluate {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		System.out.println("Known word accuracy: " + ((double) evalHandler.knownGood() /
-				(evalHandler.knownBad() + evalHandler.knownGood())));
-		System.out.println("Unknown word accuracy: " + ((double) evalHandler.unknownGood() /
-				(evalHandler.unknownBad() + evalHandler.unknownGood())));
+
+        System.out.println(String.format("Overall accuracy: %.2f", (double) evalHandler.overallGood() /
+                (evalHandler.overallGood() + evalHandler.overallBad()) * 100.));
+		System.out.println(String.format("Known word accuracy: %.2f", (double) evalHandler.knownGood() /
+				(evalHandler.knownBad() + evalHandler.knownGood()) * 100.));
+		System.out.println(String.format("Unknown word accuracy: %.2f", (double) evalHandler.unknownGood() /
+				(evalHandler.unknownBad() + evalHandler.unknownGood()) * 100.));
 	}
 }
