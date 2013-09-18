@@ -1,4 +1,4 @@
-// Copyright 2008, 2009 Daniel de Kok
+// Copyright 2008, 2009, 2013 Daniel de Kok
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,8 +14,11 @@
 
 package eu.danieldk.nlp.jitar.cli;
 
-import eu.danieldk.nlp.jitar.corpus.*;
-import eu.danieldk.nlp.jitar.training.TrainingHandler;
+import eu.danieldk.nlp.jitar.corpus.BrownCorpusReader;
+import eu.danieldk.nlp.jitar.corpus.CONLLCorpusReader;
+import eu.danieldk.nlp.jitar.corpus.CorpusReader;
+import eu.danieldk.nlp.jitar.corpus.TaggedToken;
+import eu.danieldk.nlp.jitar.training.FrequenciesCollector;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -59,46 +62,51 @@ public class Train {
         writer.flush();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length != 4) {
             System.out.println("Train [brown/conll] corpus lexicon ngrams");
             System.exit(1);
         }
 
-        List<TaggedWord> startMarkers = new ArrayList<TaggedWord>();
-        startMarkers.add(new TaggedWord("<START>", "<START>"));
-        startMarkers.add(new TaggedWord("<START>", "<START>"));
-        List<TaggedWord> endMarkers = new ArrayList<TaggedWord>();
-        endMarkers.add(new TaggedWord("<END>", "<END>"));
+        List<TaggedToken> startMarkers = new ArrayList<TaggedToken>();
+        startMarkers.add(new TaggedToken("<START>", "<START>"));
+        startMarkers.add(new TaggedToken("<START>", "<START>"));
+        List<TaggedToken> endMarkers = new ArrayList<TaggedToken>();
+        endMarkers.add(new TaggedToken("<END>", "<END>"));
 
-        CorpusReader<TaggedWord> corpusReader = null;
-        if (args[0].equals("brown"))
-            corpusReader = new BrownCorpusReader(startMarkers, endMarkers, true);
-        else if (args[0].equals("conll"))
-            corpusReader = new CONLLCorpusReader(startMarkers, endMarkers, true);
-        else {
-            System.err.println(String.format("Unknown corpus type:", args[0]));
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(args[1]));
+        } catch (FileNotFoundException e) {
+            System.err.println(String.format("Could not open corpus for reading:", e.getMessage()));
             System.exit(1);
         }
 
-        TrainingHandler trainHandler = new TrainingHandler();
-        corpusReader.addHandler(trainHandler);
-
+        FrequenciesCollector frequenciesCollector = new FrequenciesCollector();
+        CorpusReader corpusReader = null;
         try {
-            corpusReader.parse(new BufferedReader(new FileReader(args[1])));
+            if (args[0].equals("brown"))
+                corpusReader = new BrownCorpusReader(reader, startMarkers, endMarkers, true);
+            else if (args[0].equals("conll"))
+                corpusReader = new CONLLCorpusReader(reader, startMarkers, endMarkers, true);
+            else {
+                System.err.println(String.format("Unknown corpus type:", args[0]));
+                System.exit(1);
+            }
+
+            frequenciesCollector.process(corpusReader);
         } catch (IOException e) {
-            System.out.println("Could not read corpus!");
-            e.printStackTrace();
+            System.err.println(String.format("Error reading corpus: %s", e.getMessage()));
             System.exit(1);
-        } catch (CorpusReaderException e) {
-            e.printStackTrace();
-            System.exit(1);
+        } finally {
+            if (corpusReader != null)
+                corpusReader.close();
         }
 
         try {
-            writeLexicon(trainHandler.lexicon(), new BufferedWriter(new FileWriter(args[2])));
-            writeNGrams(trainHandler.uniGrams(), trainHandler.biGrams(),
-                    trainHandler.triGrams(), new BufferedWriter(new FileWriter(args[3])));
+            writeLexicon(frequenciesCollector.lexicon(), new BufferedWriter(new FileWriter(args[2])));
+            writeNGrams(frequenciesCollector.uniGrams(), frequenciesCollector.biGrams(),
+                    frequenciesCollector.triGrams(), new BufferedWriter(new FileWriter(args[3])));
         } catch (IOException e) {
             System.out.println("Could not write training data!");
             e.printStackTrace();

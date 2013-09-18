@@ -17,11 +17,11 @@ package eu.danieldk.nlp.jitar.corpus;
 /**
  * Instances of <i>TaggedWord</i> represent a word/tag combination.
  */
-public class TaggedWord {
+public class TaggedToken {
 	private final String d_word;
 	private final String d_tag;
 	
-	public TaggedWord(String word, String tag) {
+	public TaggedToken(String word, String tag) {
 		d_word = word;
 		d_tag = tag;
 	}
@@ -31,10 +31,10 @@ public class TaggedWord {
     if (o == this)
       return true;
 
-    if (!(o instanceof TaggedWord))
+    if (!(o instanceof TaggedToken))
       return false;
 
-    TaggedWord other = (TaggedWord) o;
+    TaggedToken other = (TaggedToken) o;
 
     return other.d_word.equals(d_word) && other.d_tag.equals(d_tag);
   }

@@ -1,8 +1,9 @@
 package eu.danieldk.nlp.jitar.training;
 
-import eu.danieldk.nlp.jitar.corpus.CorpusSentenceHandler;
-import eu.danieldk.nlp.jitar.corpus.TaggedWord;
+import eu.danieldk.nlp.jitar.corpus.CorpusReader;
+import eu.danieldk.nlp.jitar.corpus.TaggedToken;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.Map;
  * This handler will construct a lexicon and n-gram frequency list using the
  * sentences that are provided to the handler.
  */
-public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
+public class FrequenciesCollector {
     private final Map<String, Map<String, Integer>> d_lexicon;
 
     private final Map<String, Integer> d_uniGrams;
@@ -20,7 +21,7 @@ public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
 
     private final Map<String, Integer> d_triGrams;
 
-    public TrainingHandler() {
+    public FrequenciesCollector() {
         d_lexicon = new HashMap<String, Map<String, Integer>>();
         d_uniGrams = new HashMap<String, Integer>();
         d_biGrams = new HashMap<String, Integer>();
@@ -31,14 +32,17 @@ public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
         return d_biGrams;
     }
 
-    public void handleSentence(List<TaggedWord> sentence) {
-        for (int i = 0; i < sentence.size(); ++i) {
-            addLexiconEntry(sentence.get(i));
-            addUniGram(sentence, i);
-            if (i > 0)
-                addBiGram(sentence, i);
-            if (i > 1)
-                addTriGram(sentence, i);
+    public void process(CorpusReader reader) throws IOException {
+        List<TaggedToken> sentence;
+        while ((sentence = reader.readSentence()) != null) {
+            for (int i = 0; i < sentence.size(); ++i) {
+                addLexiconEntry(sentence.get(i));
+                addUniGram(sentence, i);
+                if (i > 0)
+                    addBiGram(sentence, i);
+                if (i > 1)
+                    addTriGram(sentence, i);
+            }
         }
     }
 
@@ -54,7 +58,7 @@ public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
         return d_uniGrams;
     }
 
-    private void addLexiconEntry(TaggedWord taggedWord) {
+    private void addLexiconEntry(TaggedToken taggedWord) {
         String word = taggedWord.word();
         String tag = taggedWord.tag();
 
@@ -67,7 +71,7 @@ public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
             d_lexicon.get(word).put(tag, d_lexicon.get(word).get(tag) + 1);
     }
 
-    private void addUniGram(List<TaggedWord> sentence, int index) {
+    private void addUniGram(List<TaggedToken> sentence, int index) {
         String uniGram = sentence.get(index).tag();
 
         if (!d_uniGrams.containsKey(uniGram))
@@ -76,7 +80,7 @@ public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
             d_uniGrams.put(uniGram, d_uniGrams.get(uniGram) + 1);
     }
 
-    private void addBiGram(List<TaggedWord> sentence, int index) {
+    private void addBiGram(List<TaggedToken> sentence, int index) {
         String biGram = sentence.get(index - 1).tag() + " " +
                 sentence.get(index).tag();
 
@@ -86,7 +90,7 @@ public class TrainingHandler implements CorpusSentenceHandler<TaggedWord> {
             d_biGrams.put(biGram, d_biGrams.get(biGram) + 1);
     }
 
-    private void addTriGram(List<TaggedWord> sentence, int index) {
+    private void addTriGram(List<TaggedToken> sentence, int index) {
         String triGram = sentence.get(index - 2).tag() + " " +
                 sentence.get(index - 1).tag() + " " +
                 sentence.get(index).tag();

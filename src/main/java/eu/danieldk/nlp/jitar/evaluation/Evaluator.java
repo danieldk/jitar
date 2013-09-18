@@ -14,11 +14,12 @@
 
 package eu.danieldk.nlp.jitar.evaluation;
 
-import eu.danieldk.nlp.jitar.corpus.CorpusSentenceHandler;
-import eu.danieldk.nlp.jitar.corpus.TaggedWord;
+import eu.danieldk.nlp.jitar.corpus.CorpusReader;
+import eu.danieldk.nlp.jitar.corpus.TaggedToken;
 import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.tagger.HMMTagger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import java.util.Map;
  * This handler tags the provided sentences using an {@link HMMTagger} and compares the tags
  * against the tags in the test data.
  */
-public class EvaluationHandler implements CorpusSentenceHandler<TaggedWord> {
+public class Evaluator {
     private final HMMTagger d_tagger;
 
     private final Model d_model;
@@ -42,37 +43,41 @@ public class EvaluationHandler implements CorpusSentenceHandler<TaggedWord> {
 
     private int d_unknownBad = 0;
 
-    public EvaluationHandler(HMMTagger tagger, Model model) {
+    public Evaluator(HMMTagger tagger, Model model) {
         d_tagger = tagger;
         d_model = model;
         d_lexicon = model.lexicon();
     }
 
-    public void handleSentence(List<TaggedWord> sentence) {
-        ArrayList<String> sentenceWords = new ArrayList<String>(sentence.size());
-        for (TaggedWord taggedWord : sentence)
-            sentenceWords.add(taggedWord.word());
+    public void process(CorpusReader reader) throws IOException {
+        List<TaggedToken> sentence;
+        while ((sentence = reader.readSentence()) != null) {
+            ArrayList<String> sentenceWords = new ArrayList<String>(sentence.size());
+            for (TaggedToken taggedWord : sentence)
+                sentenceWords.add(taggedWord.word());
 
-        List<String> tags = HMMTagger.highestProbabilitySequence(
-                d_tagger.viterbi(sentenceWords), d_model).sequence();
+            List<String> tags = HMMTagger.highestProbabilitySequence(
+                    d_tagger.viterbi(sentenceWords), d_model).sequence();
 
-        for (int i = 2; i < tags.size() - 1; ++i) {
-            boolean inLexicon = false;
-            if (d_lexicon.containsKey(sentenceWords.get(i)) ||
-                    d_lexicon.containsKey(sentenceWords.get(i).toLowerCase()))
-                inLexicon = true;
+            for (int i = 2; i < tags.size() - 1; ++i) {
+                boolean inLexicon = false;
+                if (d_lexicon.containsKey(sentenceWords.get(i)) ||
+                        d_lexicon.containsKey(sentenceWords.get(i).toLowerCase()))
+                    inLexicon = true;
 
-            if (tags.get(i).equals(sentence.get(i).tag())) {
-                if (inLexicon)
-                    ++d_knownGood;
-                else
-                    ++d_unknownGood;
-            } else {
-                if (inLexicon)
-                    ++d_knownBad;
-                else
-                    ++d_unknownBad;
+                if (tags.get(i).equals(sentence.get(i).tag())) {
+                    if (inLexicon)
+                        ++d_knownGood;
+                    else
+                        ++d_unknownGood;
+                } else {
+                    if (inLexicon)
+                        ++d_knownBad;
+                    else
+                        ++d_unknownBad;
+                }
             }
+
         }
     }
 

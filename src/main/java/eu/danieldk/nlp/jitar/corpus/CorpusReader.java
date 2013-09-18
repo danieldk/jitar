@@ -1,4 +1,4 @@
-// Copyright 2008, 2009 Daniel de Kok
+// Copyright 2008, 2009, 2013 Daniel de Kok
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,60 +14,25 @@
 
 package eu.danieldk.nlp.jitar.corpus;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * All corpus readers should inherit from the <i>CorpusReader</i> abstract
- * class. Child classes have to implement the <i>parse</i> method, and
- * should take care that:
- * 
- * <ul>
- * <li>Start/end markers are added.</li>
- * <li>The first word is decapitalized when requested.</li>
- * </ul>
+ * A corpus reader reads tagged tokens from a corpus.
  */
-public abstract class CorpusReader<WordType> {	
-	/**
-	 * @param sentenceHandlers Handlers that corpus sentences should be passed to.
-	 * @param startMarkers Start markers to add to sentences.
-	 * @param endMarkers End markers to add to sentences.
-	 */
-	public CorpusReader(List<WordType> startMarkers,
-			List<WordType> endMarkers, boolean decapitalizeFirstWord) {
-		d_startMarkers = new ArrayList<WordType>(startMarkers);
-		d_endMarkers = new ArrayList<WordType>(endMarkers);
-		d_decapitalizeFirstWord = decapitalizeFirstWord;
-	}
-		
-	/**
-	 * Parse a corpus, passing sentences to registered corpus handlers.
-	 * @param reader Reader providing the data to parse.
-	 * @throws IOException
-	 */
-	abstract public void parse(BufferedReader reader) throws IOException, CorpusReaderException;
-	
-	/**
-	 * This method adds a sentence handler to the corpus reader.
-	 * @param sentenceHandler The handler to add.
-	 */
-	public void addHandler(CorpusSentenceHandler<WordType> sentenceHandler) {
-		d_sentenceHandlers.add(sentenceHandler);
-	}
-	
-	/**
-	 * This method adds a sentence handler from the corpus reader.
-	 * @param sentenceHandler The handler to remove.
-	 */
-	public void removeHandler(CorpusSentenceHandler<WordType> sentenceHandler) {
-		d_sentenceHandlers.remove(sentenceHandler);
-	}
-	
-	protected final List<CorpusSentenceHandler<WordType>> d_sentenceHandlers =
-		new ArrayList<CorpusSentenceHandler<WordType>>();
-	protected final List<WordType> d_startMarkers;
-	protected final List<WordType> d_endMarkers;
-	protected final boolean d_decapitalizeFirstWord;
+public interface CorpusReader {
+    /**
+     * Close the reader.
+     *
+     * @throws IOException
+     */
+    public void close() throws IOException;
+
+    /**
+     * Read a sentence.
+     *
+     * @return A list of tokens with tags, or <tt>null</tt> if the reader is exhausted.
+     * @throws IOException
+     */
+    public List<TaggedToken> readSentence() throws IOException;
 }
