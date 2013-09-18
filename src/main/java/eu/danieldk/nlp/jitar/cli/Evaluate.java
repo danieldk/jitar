@@ -22,10 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 
-import eu.danieldk.nlp.jitar.corpus.BrownCorpusReader;
-import eu.danieldk.nlp.jitar.corpus.CorpusReader;
-import eu.danieldk.nlp.jitar.corpus.CorpusSentenceHandler;
-import eu.danieldk.nlp.jitar.corpus.TaggedWord;
+import eu.danieldk.nlp.jitar.corpus.*;
 import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.languagemodel.LanguageModel;
 import eu.danieldk.nlp.jitar.languagemodel.LinearInterpolationLM;
@@ -94,19 +91,27 @@ public class Evaluate {
 		public int unknownGood() {
 			return d_unknownGood;
 		}
+
+        public int overallBad() {
+            return d_knownBad + d_unknownBad;
+        }
+
+        public int overallGood() {
+            return d_knownGood + d_unknownGood;
+        }
 	}
 
 	public static void main(String[] args) {
-		if (args.length != 3) {
-			System.out.println("Evaluate lexicon ngrams corpus");
+		if (args.length != 4) {
+			System.out.println("Evaluate [brown/conll] lexicon ngrams corpus");
 			System.exit(1);
 		}
 		
 		Model model = null;
 		
 		try {
-			model = Model.readModel(new BufferedReader(new FileReader(args[0])),
-					new BufferedReader(new FileReader(args[1])));
+			model = Model.readModel(new BufferedReader(new FileReader(args[1])),
+					new BufferedReader(new FileReader(args[2])));
 		} catch (IOException e) {
 			System.out.println("Unable to read training data!");
 			e.printStackTrace();
@@ -126,15 +131,22 @@ public class Evaluate {
 		startMarkers.add(new TaggedWord("<START>", "<START>"));
 		List<TaggedWord> endMarkers = new ArrayList<TaggedWord>();
 		endMarkers.add(new TaggedWord("<END>", "<END>"));
-		
-		CorpusReader<TaggedWord> corpusReader = new BrownCorpusReader(startMarkers,
-				endMarkers, false);
+
+        CorpusReader<TaggedWord> corpusReader = null;
+        if (args[0].equals("brown"))
+            corpusReader = new BrownCorpusReader(startMarkers, endMarkers, true);
+        else if (args[0].equals("conll"))
+            corpusReader = new CONLLCorpusReader(startMarkers, endMarkers, true);
+        else {
+            System.err.println(String.format("Unknown corpus type:", args[0]));
+            System.exit(1);
+        }
 		
 		EvalHandler evalHandler = new EvalHandler(tagger, model);
 		corpusReader.addHandler(evalHandler);
 
 		try {
-			corpusReader.parse(new BufferedReader(new FileReader(args[2])));
+			corpusReader.parse(new BufferedReader(new FileReader(args[3])));
 		} catch (Exception e) {
 			System.out.println("Could not read corpus!");
 			e.printStackTrace();
