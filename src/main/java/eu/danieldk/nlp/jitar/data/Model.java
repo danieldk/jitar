@@ -40,7 +40,7 @@ public class Model {
 		}
 	}
 
-	private Model(Map<String, Map<Integer, Integer>> wordTagFreqs, Map<String, Integer> tagNumbers,
+	public Model(Map<String, Map<Integer, Integer>> wordTagFreqs, Map<String, Integer> tagNumbers,
 			Map<Integer, String> numberTags, Map<UniGram, Integer> uniGramFreqs,
 			Map<BiGram, Integer> biGramFreqs, Map<TriGram, Integer> triGramFreqs) {	
 		for (Entry<String, Map<Integer, Integer>> lexiconEntry: wordTagFreqs.entrySet()) {
