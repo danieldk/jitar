@@ -1,9 +1,7 @@
-Jitar
-=====
+# Jitar
 A simple Trigram HMM part-of-speech tagger
 
-Introduction
-------------
+## Introduction
 
 Jitar is a simple part-of-speech tagger, based on a trigram Hidden
 Markov Model (HMM). It (partly) implements the ideas set forth in
@@ -14,8 +12,7 @@ Java programs, or languages that run on the JVM.
 
 The Jitar API will be highly unstable for the first few versions!
 
-Training
---------
+## Training
 
 A model can be created from a corpus that includes part of speech
 tags, such as the Brown corpus. The model can be created easily with
@@ -28,8 +25,7 @@ and *ngrams* files will be created and form the model.
 
 Sample models are included in the *models* directory.
 
-Tagging
--------
+## Tagging
 
 Usually, you will want to call the tagger from your own program, but
 we have included a simple command line tagger as a sample. This
@@ -43,13 +39,32 @@ the standard output. For example:
 
 A model based on the Brown corpus is included in models/brown.
 
-Authors
--------
+## Release plan
+
+For version 0.y.z, there might be API breakage. The plan is to offer
+API stability for a given *x* in *x.y.z* when *x >= 1*.
+
+### 0.3.0
+
+* Use Dictomaton to store the lexicon and suffixes for unknown words.
+* Compute interpolated scores only once.
+
+### 0.2.0
+
+* Unified training and tagging data structures.
+* Add a utility for N-fold cross-validation.
+* Add more unit tests.
+
+### 0.1.0
+
+* Release in the Maven Central Repository.
+* Convenient shell-script wrappers for training/tagging/evaluation.
+
+## Authors
 
 Daniël de Kok &lt;<me@danieldk.eu>&gt;
 
-FAQ
----
+## FAQ
 
 - "What's up with the name?"
 
