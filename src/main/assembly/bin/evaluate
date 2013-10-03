@@ -1,0 +1,5 @@
+#!/bin/sh
+
+JITAR_HOME=$(dirname "$0")/..
+
+java -cp "${JITAR_HOME}/lib/*" eu.danieldk.nlp.jitar.cli.Evaluate $*
