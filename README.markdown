@@ -12,6 +12,38 @@ Java programs, or languages that run on the JVM.
 
 The Jitar API will be highly unstable for the first few versions!
 
+## Download
+
+The latest Jitar version can be downloaded from the
+[releases](https://github.com/danieldk/jitar/releases) page. The
+binary distribution includes a couple of handy scripts to use
+Jitar.
+
+If you would like to use Jitar in your own software, add it as
+a dependency.
+
+Maven:
+
+~~~
+<dependency>
+    <groupId>eu.danieldk.nlp.jitar</groupId>
+    <artifactId>jitar</artifactId>
+    <version>0.1.0</version>
+</dependency>
+~~~
+
+SBT:
+
+~~~
+libraryDependencies += "eu.danieldk.nlp.jitar" % "jitar" % "0.1.0"
+~~~
+
+Grails:
+
+~~~
+compile 'eu.danieldk.nlp.jitar:jitar:0.1.0'
+~~~
+
 ## Training
 
 A model can be created from a corpus that includes part of speech
