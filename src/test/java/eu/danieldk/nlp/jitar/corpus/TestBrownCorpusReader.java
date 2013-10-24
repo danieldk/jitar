@@ -41,7 +41,7 @@ public class TestBrownCorpusReader {
         BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
         CorpusReader corpusReader = createReader(rdr);
-        StoreHandler handler = new StoreHandler();
+        ReaderConsumer handler = new ReaderConsumer();
 
         try {
             handler.process(corpusReader);
@@ -72,7 +72,7 @@ public class TestBrownCorpusReader {
         BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
         CorpusReader corpusReader = createReader(rdr);
-        StoreHandler handler = new StoreHandler();
+        ReaderConsumer handler = new ReaderConsumer();
 
         try {
             handler.process(corpusReader);
@@ -97,7 +97,7 @@ public class TestBrownCorpusReader {
         BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
         CorpusReader corpusReader = createReader(rdr);
-        StoreHandler handler = new StoreHandler();
+        ReaderConsumer handler = new ReaderConsumer();
 
         handler.process(corpusReader);
     }
@@ -108,7 +108,7 @@ public class TestBrownCorpusReader {
         BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
         CorpusReader corpusReader = createReader(rdr);
-        StoreHandler handler = new StoreHandler();
+        ReaderConsumer handler = new ReaderConsumer();
         handler.process(corpusReader);
     }
 
@@ -118,12 +118,12 @@ public class TestBrownCorpusReader {
         BufferedReader rdr = new BufferedReader(new InputStreamReader(is));
 
         CorpusReader corpusReader = createReader(rdr);
-        StoreHandler handler = new StoreHandler();
+        ReaderConsumer handler = new ReaderConsumer();
 
         handler.process(corpusReader);
     }
 
-    private class StoreHandler {
+    private class ReaderConsumer {
         private List<List<TaggedToken>> d_sentences = new ArrayList<List<TaggedToken>>();
 
         public void process(CorpusReader reader) throws IOException {
