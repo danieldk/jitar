@@ -81,6 +81,7 @@ API stability for a given *x* in *x.y.z* when *x >= 1*.
 
 ### 0.2.0
 
+* Java-style corpus readers.
 * Unified training and tagging data structures.
 * Add a utility for N-fold cross-validation.
 * Add more unit tests.
