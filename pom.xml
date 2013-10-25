@@ -44,6 +44,7 @@
 
     <modules>
         <module>jitar</module>
+        <module>jitar-model-brown</module>
     </modules>
 
     <dependencyManagement>
