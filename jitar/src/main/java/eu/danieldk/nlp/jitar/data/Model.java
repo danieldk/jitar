@@ -14,16 +14,15 @@
 
 package eu.danieldk.nlp.jitar.data;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class Model {
+public class Model implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Map<String, Map<Integer, Integer>> d_wordTagFreqs;
 
     private final Map<String, Integer> d_tagNumbers;
@@ -66,6 +65,23 @@ public class Model {
         return readModel(new BufferedReader(new InputStreamReader(lexiconStream)),
                 new BufferedReader(new InputStreamReader(nGramStream)));
 
+    }
+
+    public static Model readModel(File modelFile) throws IOException {
+        return readModel(new FileInputStream(modelFile));
+    }
+
+    public static Model readModel(InputStream modelStream) throws IOException {
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(modelStream);
+            return (Model) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new IOException(e);
+        } finally {
+            if (ois != null)
+                ois.close();
+        }
     }
 
     /**

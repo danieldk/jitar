@@ -2,6 +2,10 @@ package eu.danieldk.nlp.jitar.training;
 
 import eu.danieldk.nlp.jitar.corpus.CorpusReader;
 import eu.danieldk.nlp.jitar.corpus.TaggedToken;
+import eu.danieldk.nlp.jitar.data.BiGram;
+import eu.danieldk.nlp.jitar.data.Model;
+import eu.danieldk.nlp.jitar.data.TriGram;
+import eu.danieldk.nlp.jitar.data.UniGram;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,23 +17,30 @@ import java.util.Map;
  * sentences that are provided to the handler.
  */
 public class FrequenciesCollector {
-    private final Map<String, Map<String, Integer>> d_lexicon;
+    private final Map<Integer, String> d_numberTags;
 
-    private final Map<String, Integer> d_uniGrams;
+    private final Map<String, Integer> d_tagNumbers;
 
-    private final Map<String, Integer> d_biGrams;
+    private final Map<String, Map<Integer, Integer>> d_lexicon;
 
-    private final Map<String, Integer> d_triGrams;
+    private final Map<UniGram, Integer> d_uniGrams;
+
+    private final Map<BiGram, Integer> d_biGrams;
+
+    private final Map<TriGram, Integer> d_triGrams;
 
     public FrequenciesCollector() {
-        d_lexicon = new HashMap<String, Map<String, Integer>>();
-        d_uniGrams = new HashMap<String, Integer>();
-        d_biGrams = new HashMap<String, Integer>();
-        d_triGrams = new HashMap<String, Integer>();
+        d_numberTags = new HashMap<Integer, String>();
+        d_tagNumbers = new HashMap<String, Integer>();
+        d_lexicon = new HashMap<String, Map<Integer, Integer>>();
+        d_uniGrams = new HashMap<UniGram, Integer>();
+        d_biGrams = new HashMap<BiGram, Integer>();
+        d_triGrams = new HashMap<TriGram, Integer>();
     }
 
-    public Map<String, Integer> biGrams() {
-        return d_biGrams;
+    public Model model()
+    {
+        return new Model(d_lexicon, d_tagNumbers, d_numberTags, d_uniGrams, d_biGrams, d_triGrams);
     }
 
     public void process(CorpusReader reader) throws IOException {
@@ -46,33 +57,38 @@ public class FrequenciesCollector {
         }
     }
 
-    public Map<String, Map<String, Integer>> lexicon() {
-        return d_lexicon;
-    }
+    private Integer lookupTag(String tag) {
+        Integer tagNumber = d_tagNumbers.get(tag);
+        if (tagNumber == null) {
+            tagNumber = d_tagNumbers.size();
+            d_tagNumbers.put(tag, tagNumber);
+            d_numberTags.put(tagNumber, tag);
+        }
 
-    public Map<String, Integer> triGrams() {
-        return d_triGrams;
-    }
-
-    public Map<String, Integer> uniGrams() {
-        return d_uniGrams;
+        return tagNumber;
     }
 
     private void addLexiconEntry(TaggedToken taggedWord) {
         String word = taggedWord.word();
         String tag = taggedWord.tag();
 
-        if (!d_lexicon.containsKey(word))
-            d_lexicon.put(word, new HashMap<String, Integer>());
+        Map<Integer, Integer> tagFreqs = d_lexicon.get(word);
+        if (tagFreqs == null) {
+            tagFreqs = new HashMap<Integer, Integer>();
+            d_lexicon.put(word, tagFreqs);
+        }
 
-        if (!d_lexicon.get(word).containsKey(tag))
-            d_lexicon.get(word).put(tag, 1);
-        else
-            d_lexicon.get(word).put(tag, d_lexicon.get(word).get(tag) + 1);
+        Integer tagNum = lookupTag(tag);
+
+        Integer f = tagFreqs.get(tagNum);
+        if (f == null)
+            f = 0;
+
+        tagFreqs.put(tagNum, ++f);
     }
 
     private void addUniGram(List<TaggedToken> sentence, int index) {
-        String uniGram = sentence.get(index).tag();
+        UniGram uniGram = new UniGram(lookupTag(sentence.get(index).tag()));
 
         if (!d_uniGrams.containsKey(uniGram))
             d_uniGrams.put(uniGram, 1);
@@ -81,8 +97,7 @@ public class FrequenciesCollector {
     }
 
     private void addBiGram(List<TaggedToken> sentence, int index) {
-        String biGram = sentence.get(index - 1).tag() + " " +
-                sentence.get(index).tag();
+        BiGram biGram = new BiGram(lookupTag(sentence.get(index - 1).tag()), lookupTag(sentence.get(index).tag()));
 
         if (!d_biGrams.containsKey(biGram))
             d_biGrams.put(biGram, 1);
@@ -91,9 +106,9 @@ public class FrequenciesCollector {
     }
 
     private void addTriGram(List<TaggedToken> sentence, int index) {
-        String triGram = sentence.get(index - 2).tag() + " " +
-                sentence.get(index - 1).tag() + " " +
-                sentence.get(index).tag();
+        TriGram triGram = new TriGram(lookupTag(sentence.get(index - 2).tag()),
+                lookupTag(sentence.get(index - 1).tag()),
+                lookupTag(sentence.get(index).tag()));
 
         if (!d_triGrams.containsKey(triGram))
             d_triGrams.put(triGram, 1);

@@ -14,10 +14,7 @@
 
 package eu.danieldk.nlp.jitar.cli;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,21 +29,9 @@ import eu.danieldk.nlp.jitar.tagger.HMMTagger;
 import eu.danieldk.nlp.jitar.wordhandler.KnownWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.SuffixWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.WordHandler;
+import org.apache.commons.lang3.StringUtils;
 
 public class Tag {
-	private static String join(Collection<String> strings, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		
-		Iterator<String> iter = strings.iterator();
-		while (iter.hasNext()) {
-			sb.append(iter.next());
-			if (iter.hasNext())
-				sb.append(delimiter);
-		}
-		
-		return sb.toString();
-	}
-
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.out.println("Tag lexicon ngrams");
@@ -54,15 +39,14 @@ public class Tag {
 		}
 
 		// Load the model.
-		Model model = null;
-		try {
-			model = Model.readModel(new BufferedReader(new FileReader(args[0])),
-					new BufferedReader(new FileReader(args[1])));
-		} catch (IOException e) {
-			System.out.println("Unable to read the model!");
-			e.printStackTrace();
-			System.exit(1);
-		}
+        Model model = null;
+        try {
+            model = Model.readModel(new File(args[1]));
+        } catch (IOException e) {
+            System.out.println("Unable to read training data!");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
 		// Set up word handlers. The suffix word handler is used as a fallback of the
 		// known word handler.
@@ -95,7 +79,7 @@ public class Tag {
 					HMMTagger.highestProbabilitySequence(tagger.viterbi(tokenList),
 						model).sequence();
 				
-				System.out.println(join(tags.subList(2, tags.size() - 1), " "));
+				System.out.println(StringUtils.join(tags.subList(2, tags.size() - 1), ' '));
 			}
 		} catch (IOException e) {
 		}

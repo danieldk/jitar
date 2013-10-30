@@ -18,6 +18,10 @@ import eu.danieldk.nlp.jitar.corpus.BrownCorpusReader;
 import eu.danieldk.nlp.jitar.corpus.CONLLCorpusReader;
 import eu.danieldk.nlp.jitar.corpus.CorpusReader;
 import eu.danieldk.nlp.jitar.corpus.TaggedToken;
+import eu.danieldk.nlp.jitar.data.BiGram;
+import eu.danieldk.nlp.jitar.data.Model;
+import eu.danieldk.nlp.jitar.data.TriGram;
+import eu.danieldk.nlp.jitar.data.UniGram;
 import eu.danieldk.nlp.jitar.training.FrequenciesCollector;
 
 import java.io.*;
@@ -27,44 +31,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class Train {
-    private static void writeNGrams(Map<String, Integer> uniGrams,
-                                    Map<String, Integer> biGrams, Map<String, Integer> triGrams,
-                                    BufferedWriter writer) throws IOException {
-        for (Entry<String, Integer> entry : uniGrams.entrySet())
-            writer.write(entry.getKey() + " " + entry.getValue() + "\n");
-
-        for (Entry<String, Integer> entry : biGrams.entrySet())
-            writer.write(entry.getKey() + " " + entry.getValue() + "\n");
-
-        for (Entry<String, Integer> entry : triGrams.entrySet())
-            writer.write(entry.getKey() + " " + entry.getValue() + "\n");
-
-        writer.flush();
-    }
-
-    private static void writeLexicon(Map<String, Map<String, Integer>> lexicon,
-                                     BufferedWriter writer) throws IOException {
-        for (Entry<String, Map<String, Integer>> wordEntry : lexicon.entrySet()) {
-            String word = wordEntry.getKey();
-
-            writer.write(word);
-
-            for (Entry<String, Integer> tagEntry : lexicon.get(word).entrySet()) {
-                writer.write(" ");
-                writer.write(tagEntry.getKey());
-                writer.write(" ");
-                writer.write(tagEntry.getValue().toString());
-            }
-
-            writer.newLine();
-        }
-
-        writer.flush();
-    }
-
     public static void main(String[] args) throws IOException {
-        if (args.length != 4) {
-            System.out.println("Train [brown/conll] corpus lexicon ngrams");
+        if (args.length != 3) {
+            System.out.println("Train [brown/conll] corpus model");
             System.exit(1);
         }
 
@@ -103,14 +72,18 @@ public class Train {
                 corpusReader.close();
         }
 
+        Model model = frequenciesCollector.model();
+
+        ObjectOutputStream oos = null;
         try {
-            writeLexicon(frequenciesCollector.lexicon(), new BufferedWriter(new FileWriter(args[2])));
-            writeNGrams(frequenciesCollector.uniGrams(), frequenciesCollector.biGrams(),
-                    frequenciesCollector.triGrams(), new BufferedWriter(new FileWriter(args[3])));
+            oos = new ObjectOutputStream(new FileOutputStream(args[2]));
+            oos.writeObject(model);
         } catch (IOException e) {
-            System.out.println("Could not write training data!");
+            System.out.println("Could not write model!");
             e.printStackTrace();
             System.exit(1);
+        } finally {
+            oos.close();
         }
     }
 

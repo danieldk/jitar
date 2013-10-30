@@ -14,10 +14,14 @@
 
 package eu.danieldk.nlp.jitar.data;
 
+import java.io.Serializable;
+
 /**
  * This class represents a word tri-gram.
  */
-public class TriGram {
+public class TriGram implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 	private final int d_t1;
 	private final int d_t2;
 	private final int d_t3;

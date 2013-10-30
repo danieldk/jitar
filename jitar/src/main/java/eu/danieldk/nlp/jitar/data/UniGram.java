@@ -14,10 +14,14 @@
 
 package eu.danieldk.nlp.jitar.data;
 
+import java.io.Serializable;
+
 /**
  * This class represents a word uni-gram.
  */
-public class UniGram {
+public class UniGram implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 	private final int d_t1;
 	
 	public UniGram(int t1) {

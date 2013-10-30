@@ -27,25 +27,21 @@ import eu.danieldk.nlp.jitar.wordhandler.KnownWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.SuffixWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.WordHandler;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Evaluate {
     public static void main(String[] args) throws IOException {
-        if (args.length != 4) {
-            System.out.println("Evaluate [brown/conll] lexicon ngrams corpus");
+        if (args.length != 3) {
+            System.out.println("Evaluate [brown/conll] model corpus");
             System.exit(1);
         }
 
         Model model = null;
 
         try {
-            model = Model.readModel(new BufferedReader(new FileReader(args[1])),
-                    new BufferedReader(new FileReader(args[2])));
+            model = Model.readModel(new File(args[1]));
         } catch (IOException e) {
             System.out.println("Unable to read training data!");
             e.printStackTrace();
@@ -68,7 +64,7 @@ public class Evaluate {
 
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(args[3]));
+            reader = new BufferedReader(new FileReader(args[2]));
         } catch (FileNotFoundException e) {
             System.err.println(String.format("Could not open corpus for reading:", e.getMessage()));
             System.exit(1);
