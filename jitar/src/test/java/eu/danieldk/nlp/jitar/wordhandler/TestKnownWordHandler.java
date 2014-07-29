@@ -38,7 +38,7 @@ public class TestKnownWordHandler {
 
     d_wordHandler = new KnownWordHandler(wordFreqs, uniFreqs);
     d_wordHandlerWithFallback = new KnownWordHandler(wordFreqs, uniFreqs,
-        new SuffixWordHandler(wordFreqs, uniFreqs, 2, 5, 5, 5, 5));
+        new SuffixWordHandler(wordFreqs, uniFreqs, 2, 5, 5, 10, 5, 5));
   }
 
   @Test

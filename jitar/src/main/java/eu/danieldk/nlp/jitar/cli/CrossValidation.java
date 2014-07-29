@@ -25,9 +25,7 @@ import eu.danieldk.nlp.jitar.wordhandler.KnownWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.SuffixWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.WordHandler;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -70,7 +68,7 @@ public class CrossValidation {
                     Util.newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers), N_FOLDS, evalFolds)) {
 
                 SuffixWordHandler swh = new SuffixWordHandler(model.lexicon(), model.uniGrams(),
-                        2, 2, 8, 10, 10);
+                        2, 2, 8, 4, 10, 10);
                 WordHandler wh = new KnownWordHandler(model.lexicon(), model.uniGrams(), swh);
                 LanguageModel lm = new LinearInterpolationLM(model.uniGrams(),
                         model.biGrams(), model.triGrams());

@@ -49,7 +49,7 @@ public class Tag {
 		// Set up word handlers. The suffix word handler is used as a fallback of the
 		// known word handler.
 		SuffixWordHandler swh = new SuffixWordHandler(model.lexicon(), model.uniGrams(),
-				2, 5, 10, 10, 10);
+				2, 2, 8, 4, 10, 10);
 		WordHandler wh = new KnownWordHandler(model.lexicon(), model.uniGrams(), swh);
 		
 		// Create an n-gram language model.

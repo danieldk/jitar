@@ -48,7 +48,7 @@ public class Evaluate {
         }
 
         SuffixWordHandler swh = new SuffixWordHandler(model.lexicon(), model.uniGrams(),
-                2, 2, 8, 10, 10);
+                2, 2, 8, 6, 10, 10);
         WordHandler wh = new KnownWordHandler(model.lexicon(), model.uniGrams(), swh);
         LanguageModel lm = new LinearInterpolationLM(model.uniGrams(),
                 model.biGrams(), model.triGrams());
