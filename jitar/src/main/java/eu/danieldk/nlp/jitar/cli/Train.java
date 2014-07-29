@@ -14,14 +14,15 @@
 
 package eu.danieldk.nlp.jitar.cli;
 
-import eu.danieldk.nlp.jitar.corpus.BrownCorpusReader;
-import eu.danieldk.nlp.jitar.corpus.CONLLCorpusReader;
 import eu.danieldk.nlp.jitar.corpus.CorpusReader;
 import eu.danieldk.nlp.jitar.corpus.TaggedToken;
 import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.training.FrequenciesCollector;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,36 +39,13 @@ public class Train {
         List<TaggedToken> endMarkers = new ArrayList<>();
         endMarkers.add(new TaggedToken("<END>", "<END>"));
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new FileReader(args[1]));
-        } catch (FileNotFoundException e) {
-            System.err.println(String.format("Could not open corpus for reading: %s", e.getMessage()));
-            System.exit(1);
-        }
-
         FrequenciesCollector frequenciesCollector = new FrequenciesCollector();
-        CorpusReader corpusReader = null;
-        try {
-            switch (args[0]) {
-                case "brown":
-                    corpusReader = new BrownCorpusReader(reader, startMarkers, endMarkers, true);
-                    break;
-                case "conll":
-                    corpusReader = new CONLLCorpusReader(reader, startMarkers, endMarkers, true);
-                    break;
-                default:
-                    System.err.println(String.format("Unknown corpus type: %s", args[0]));
-                    System.exit(1);
-            }
 
+        try (CorpusReader corpusReader = Util.newCorpusReader(args[0], new File(args[1]), startMarkers, endMarkers)) {
             frequenciesCollector.process(corpusReader);
         } catch (IOException e) {
             System.err.println(String.format("Error reading corpus: %s", e.getMessage()));
             System.exit(1);
-        } finally {
-            if (corpusReader != null)
-                corpusReader.close();
         }
 
         Model model = frequenciesCollector.model();
@@ -80,6 +58,4 @@ public class Train {
             System.exit(1);
         }
     }
-
-
 }

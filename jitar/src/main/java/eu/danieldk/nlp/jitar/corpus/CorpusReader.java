@@ -14,18 +14,20 @@
 
 package eu.danieldk.nlp.jitar.corpus;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 
 /**
  * A corpus reader reads tagged tokens from a corpus.
  */
-public interface CorpusReader {
+public interface CorpusReader extends Closeable {
     /**
      * Close the reader.
      *
      * @throws IOException
      */
+    @Override
     public void close() throws IOException;
 
     /**

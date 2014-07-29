@@ -61,9 +61,8 @@ public class Tag {
 		
 		// Read from the standard input, and print tags for the input to the standard
 		// output.
-		BufferedReader reader =  new BufferedReader(new InputStreamReader(System.in));
-		String line;
-		try {
+		try (BufferedReader reader =  new BufferedReader(new InputStreamReader(System.in))) {
+            String line;
 			while ((line = reader.readLine()) != null) {
 				String tokens[] = line.split("\\s+");
 				List<String> tokenList = new ArrayList<>(Arrays.asList(tokens));

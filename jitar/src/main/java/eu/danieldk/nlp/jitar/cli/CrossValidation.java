@@ -57,25 +57,17 @@ public class CrossValidation {
             Set<Integer> trainingFolds = getTrainingFolds(evalFold);
 
             Model model;
-            CorpusReader corpusReader = null;
-            try {
-                corpusReader = newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers);
-                corpusReader = new SplittingCorpusReader(corpusReader, N_FOLDS, trainingFolds);
+            try (CorpusReader corpusReader = new SplittingCorpusReader(
+                    Util.newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers), N_FOLDS, trainingFolds)) {
                 FrequenciesCollector collector = new FrequenciesCollector();
                 collector.process(corpusReader);
                 model = collector.model();
-
-            } finally {
-                if (corpusReader != null)
-                    corpusReader.close();
             }
 
-            CorpusReader evalCorpusReader = null;
-            try {
-                evalCorpusReader = newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers);
-                Set<Integer> evalFolds = new HashSet<>();
-                evalFolds.add(evalFold);
-                evalCorpusReader = new SplittingCorpusReader(evalCorpusReader, N_FOLDS, evalFolds);
+            Set<Integer> evalFolds = new HashSet<>();
+            evalFolds.add(evalFold);
+            try (CorpusReader evalCorpusReader = new SplittingCorpusReader(
+                    Util.newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers), N_FOLDS, evalFolds)) {
 
                 SuffixWordHandler swh = new SuffixWordHandler(model.lexicon(), model.uniGrams(),
                         2, 2, 8, 10, 10);
@@ -95,10 +87,6 @@ public class CrossValidation {
                 System.out.println(String.format("Fold %d accuracy: %.2f (unknown: %.2f)", evalFold, overallPrec, unknownPrec));
 
                 overallPrecs.add(overallPrec);
-
-            } finally {
-                if (evalCorpusReader != null)
-                    evalCorpusReader.close();
             }
         }
 
@@ -116,22 +104,6 @@ public class CrossValidation {
             if (fold != trainFold)
                 trainingFolds.add(fold);
         return trainingFolds;
-    }
-
-    private static CorpusReader newCorpusReader(String corpusType, File corpus, List<TaggedToken> startMarkers,
-                                                List<TaggedToken> endMarkers) throws IOException {
-        CorpusReader corpusReader;
-        switch (corpusType) {
-            case "brown":
-                corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
-                break;
-            case "conll":
-                corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
-                break;
-            default:
-                throw new IOException(String.format("Unknown corpus type: %s", corpusType));
-        }
-        return corpusReader;
     }
 
     private static List<TaggedToken> getEndMarkers() {
