@@ -21,10 +21,10 @@ class Util {
         CorpusReader corpusReader;
         switch (corpusType) {
             case "brown":
-                corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
+                corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, false);
                 break;
             case "conll":
-                corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
+                corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, false);
                 break;
             default:
                 throw new IOException(String.format("Unknown corpus type: %s", corpusType));

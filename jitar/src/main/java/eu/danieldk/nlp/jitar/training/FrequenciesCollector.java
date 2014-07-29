@@ -8,6 +8,7 @@ import eu.danieldk.nlp.jitar.data.TriGram;
 import eu.danieldk.nlp.jitar.data.UniGram;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +39,15 @@ public class FrequenciesCollector {
         d_triGrams = new HashMap<>();
     }
 
-    public Model model()
-    {
+    public Model model() {
         return new Model(d_lexicon, d_tagNumbers, d_numberTags, d_uniGrams, d_biGrams, d_triGrams);
     }
 
     public void process(CorpusReader reader) throws IOException {
         List<TaggedToken> sentence;
         while ((sentence = reader.readSentence()) != null) {
+            sentence = addCapitalTags(sentence);
+
             for (int i = 0; i < sentence.size(); ++i) {
                 addLexiconEntry(sentence.get(i));
                 addUniGram(sentence, i);
@@ -55,6 +57,25 @@ public class FrequenciesCollector {
                     addTriGram(sentence, i);
             }
         }
+    }
+
+    private List<TaggedToken> addCapitalTags(List<TaggedToken> sentence) {
+        List<TaggedToken> capitalTags = new ArrayList<>();
+
+        for (int i = 0; i < sentence.size(); ++i) {
+            TaggedToken taggedToken = sentence.get(i);
+
+            if (i < 2 || i == sentence.size() - 1)
+                capitalTags.add(taggedToken);
+            else {
+                if (Character.isUpperCase(taggedToken.word().charAt(0)))
+                    capitalTags.add(new TaggedToken(taggedToken.word(), String.format("c-%s", taggedToken.tag())));
+                else
+                    capitalTags.add(new TaggedToken(taggedToken.word(), String.format("n-%s", taggedToken.tag())));
+            }
+        }
+
+        return capitalTags;
     }
 
     private Integer lookupTag(String tag) {
