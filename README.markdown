@@ -85,6 +85,7 @@ API stability for a given *x* in *x.y.z* when *x >= 1*.
   and improvement of around .2% on German and English.
 * Add a separate unknown word distribution for words containing a dash.
   This provides a modest improvement for English and German.
+* API simplification (no more need to use/specify start and end markers).
 
 ### 0.2.0
 
