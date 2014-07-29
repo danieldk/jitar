@@ -74,10 +74,17 @@ the standard output. For example:
 For version 0.y.z, there might be API breakage. The plan is to offer
 API stability for a given *x* in *x.y.z* when *x >= 1*.
 
-### 0.3.0
+### 0.4.0 (Planned)
 
 * Use Dictomaton to store the lexicon and suffixes for unknown words.
 * Compute interpolated scores only once.
+
+### 0.3.0 (Planned)
+
+* Add a capitalization marking to tags (as per the TnT paper). This gives
+  and improvement of around .2% on German and English.
+* Add a separate unknown word distribution for words containing a dash.
+  This provides a modest improvement for English and German.
 
 ### 0.2.0
 
