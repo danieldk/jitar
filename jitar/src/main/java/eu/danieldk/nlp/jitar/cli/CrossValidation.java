@@ -14,7 +14,8 @@
 
 package eu.danieldk.nlp.jitar.cli;
 
-import eu.danieldk.nlp.jitar.corpus.*;
+import eu.danieldk.nlp.jitar.corpus.CorpusReader;
+import eu.danieldk.nlp.jitar.corpus.SplittingCorpusReader;
 import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.evaluation.Evaluator;
 import eu.danieldk.nlp.jitar.languagemodel.LanguageModel;
@@ -41,9 +42,6 @@ public class CrossValidation {
             System.exit(1);
         }
 
-        List<TaggedToken> startMarkers = getStartMarkers();
-        List<TaggedToken> endMarkers = getEndMarkers();
-
         String corpusType = args[0];
         String corpusFilename = args[1];
 
@@ -56,7 +54,7 @@ public class CrossValidation {
 
             Model model;
             try (CorpusReader corpusReader = new SplittingCorpusReader(
-                    Util.newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers), N_FOLDS, trainingFolds)) {
+                    Util.newCorpusReader(corpusType, new File(corpusFilename)), N_FOLDS, trainingFolds)) {
                 FrequenciesCollector collector = new FrequenciesCollector();
                 collector.process(corpusReader);
                 model = collector.model();
@@ -65,7 +63,7 @@ public class CrossValidation {
             Set<Integer> evalFolds = new HashSet<>();
             evalFolds.add(evalFold);
             try (CorpusReader evalCorpusReader = new SplittingCorpusReader(
-                    Util.newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers), N_FOLDS, evalFolds)) {
+                    Util.newCorpusReader(corpusType, new File(corpusFilename)), N_FOLDS, evalFolds)) {
 
                 SuffixWordHandler swh = new SuffixWordHandler(model.lexicon(), model.uniGrams(),
                         2, 2, 8, 4, 10, 10);
@@ -102,18 +100,5 @@ public class CrossValidation {
             if (fold != trainFold)
                 trainingFolds.add(fold);
         return trainingFolds;
-    }
-
-    private static List<TaggedToken> getEndMarkers() {
-        List<TaggedToken> endMarkers = new ArrayList<>();
-        endMarkers.add(new TaggedToken("<END>", "<END>"));
-        return endMarkers;
-    }
-
-    private static List<TaggedToken> getStartMarkers() {
-        List<TaggedToken> startMarkers = new ArrayList<>();
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        return startMarkers;
     }
 }

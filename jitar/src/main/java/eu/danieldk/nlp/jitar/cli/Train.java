@@ -33,15 +33,9 @@ public class Train {
             System.exit(1);
         }
 
-        List<TaggedToken> startMarkers = new ArrayList<>();
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        List<TaggedToken> endMarkers = new ArrayList<>();
-        endMarkers.add(new TaggedToken("<END>", "<END>"));
-
         FrequenciesCollector frequenciesCollector = new FrequenciesCollector();
 
-        try (CorpusReader corpusReader = Util.newCorpusReader(args[0], new File(args[1]), startMarkers, endMarkers)) {
+        try (CorpusReader corpusReader = Util.newCorpusReader(args[0], new File(args[1]))) {
             frequenciesCollector.process(corpusReader);
         } catch (IOException e) {
             System.err.println(String.format("Error reading corpus: %s", e.getMessage()));

@@ -57,9 +57,9 @@ public class Evaluator {
                 sentenceWords.add(taggedWord.word());
 
             List<String> tags = HMMTagger.highestProbabilitySequence(
-                    d_tagger.viterbi(sentenceWords), d_model).sequence();
+                    d_tagger.tag(sentenceWords), d_model).sequence();
 
-            for (int i = 2; i < tags.size() - 1; ++i) {
+            for (int i = 0; i < tags.size(); ++i) {
                 boolean inLexicon = false;
                 if (d_lexicon.containsKey(sentenceWords.get(i)) ||
                         d_lexicon.containsKey(sentenceWords.get(i).toLowerCase()))

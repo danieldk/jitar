@@ -15,7 +15,6 @@
 package eu.danieldk.nlp.jitar.cli;
 
 import eu.danieldk.nlp.jitar.corpus.CorpusReader;
-import eu.danieldk.nlp.jitar.corpus.TaggedToken;
 import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.evaluation.Evaluator;
 import eu.danieldk.nlp.jitar.languagemodel.LanguageModel;
@@ -27,8 +26,6 @@ import eu.danieldk.nlp.jitar.wordhandler.WordHandler;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Evaluate {
     public static void main(String[] args) throws IOException {
@@ -55,15 +52,9 @@ public class Evaluate {
 
         HMMTagger tagger = new HMMTagger(model, wh, lm, 1000.0);
 
-        List<TaggedToken> startMarkers = new ArrayList<>();
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        List<TaggedToken> endMarkers = new ArrayList<>();
-        endMarkers.add(new TaggedToken("<END>", "<END>"));
-
         Evaluator evaluator = new Evaluator(tagger, model);
 
-        try (CorpusReader corpusReader = Util.newCorpusReader(args[0], new File(args[2]), startMarkers, endMarkers)) {
+        try (CorpusReader corpusReader = Util.newCorpusReader(args[0], new File(args[2]))) {
             evaluator.process(corpusReader);
         } catch (IOException e) {
             System.err.println(String.format("Error reading corpus: %s", e.getMessage()));

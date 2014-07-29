@@ -27,16 +27,13 @@ import java.util.List;
 public class BrownCorpusReader implements CorpusReader {
     private final BufferedReader reader;
 
-    private final List<TaggedToken> startMarkers;
-
-    private final List<TaggedToken> endMarkers;
-
     boolean decapitalizeFirstWord;
 
-    public BrownCorpusReader(BufferedReader reader, List<TaggedToken> startMarkers, List<TaggedToken> endMarkers, boolean decapitalizeFirstWord) {
+    /**
+     * Construct a Brown-style corpus reader.
+     */
+    public BrownCorpusReader(BufferedReader reader, boolean decapitalizeFirstWord) {
         this.reader = reader;
-        this.startMarkers = startMarkers;
-        this.endMarkers = endMarkers;
         this.decapitalizeFirstWord = decapitalizeFirstWord;
     }
 
@@ -62,7 +59,7 @@ public class BrownCorpusReader implements CorpusReader {
             if (line.length() == 0)
                 continue;
 
-            List<TaggedToken> sentence = new ArrayList<>(startMarkers);
+            List<TaggedToken> sentence = new ArrayList<>();
 
             String[] lineParts = line.split("\\s+");
             for (int i = 0; i < lineParts.length; ++i) {
@@ -88,8 +85,6 @@ public class BrownCorpusReader implements CorpusReader {
 
                 sentence.add(new TaggedToken(word, tag));
             }
-
-            sentence.addAll(endMarkers);
 
             return sentence;
         }

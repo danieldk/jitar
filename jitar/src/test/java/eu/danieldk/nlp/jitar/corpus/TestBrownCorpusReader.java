@@ -27,12 +27,7 @@ public class TestBrownCorpusReader {
     }
 
     private static BrownCorpusReader createReader(BufferedReader reader, boolean decapFirstWord) {
-        List<TaggedToken> startMarkers = new ArrayList<>();
-        startMarkers.add(new TaggedToken("<START>", "<START>"));
-        List<TaggedToken> endMarkers = new ArrayList<>();
-        endMarkers.add(new TaggedToken("<END>", "<END>"));
-
-        return new BrownCorpusReader(reader, startMarkers, endMarkers, decapFirstWord);
+        return new BrownCorpusReader(reader, decapFirstWord);
     }
 
     @Test
@@ -51,15 +46,11 @@ public class TestBrownCorpusReader {
 
         List<List<TaggedToken>> check = new ArrayList<List<TaggedToken>>() {{
             add(new ArrayList<TaggedToken>() {{
-                add(new TaggedToken("<START>", "<START>"));
                 add(new TaggedToken("a", "AT"));
                 add(new TaggedToken("b", "BT"));
-                add(new TaggedToken("<END>", "<END>"));
             }});
             add(new ArrayList<TaggedToken>() {{
-                add(new TaggedToken("<START>", "<START>"));
                 add(new TaggedToken("c", "CT"));
-                add(new TaggedToken("<END>", "<END>"));
             }});
         }};
 
@@ -82,9 +73,7 @@ public class TestBrownCorpusReader {
 
         List<List<TaggedToken>> check = new ArrayList<List<TaggedToken>>() {{
             add(new ArrayList<TaggedToken>() {{
-                add(new TaggedToken("<START>", "<START>"));
                 add(new TaggedToken("a/a", "AT"));
-                add(new TaggedToken("<END>", "<END>"));
             }});
         }};
 

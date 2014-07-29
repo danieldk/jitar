@@ -16,15 +16,14 @@ import java.util.List;
  * @author Daniël de Kok <me@danieldk.eu>
  */
 class Util {
-    public static CorpusReader newCorpusReader(String corpusType, File corpus, List<TaggedToken> startMarkers,
-                                                List<TaggedToken> endMarkers) throws IOException {
+    public static CorpusReader newCorpusReader(String corpusType, File corpus) throws IOException {
         CorpusReader corpusReader;
         switch (corpusType) {
             case "brown":
-                corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, false);
+                corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), false);
                 break;
             case "conll":
-                corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, false);
+                corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), false);
                 break;
             default:
                 throw new IOException(String.format("Unknown corpus type: %s", corpusType));

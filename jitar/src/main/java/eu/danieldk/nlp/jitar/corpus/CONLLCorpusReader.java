@@ -24,16 +24,13 @@ import java.util.List;
 public class CONLLCorpusReader implements CorpusReader {
     private final BufferedReader reader;
 
-    private final List<TaggedToken> startMarkers;
-
-    private final List<TaggedToken> endMarkers;
-
     boolean decapitalizeFirstWord;
 
-    public CONLLCorpusReader(BufferedReader reader, List<TaggedToken> startMarkers, List<TaggedToken> endMarkers, boolean decapitalizeFirstWord) {
+    /**
+     * Construct a CONLL corpus reader, use default start/end markers.
+     */
+    public CONLLCorpusReader(BufferedReader reader, boolean decapitalizeFirstWord) {
         this.reader = reader;
-        this.startMarkers = startMarkers;
-        this.endMarkers = endMarkers;
         this.decapitalizeFirstWord = decapitalizeFirstWord;
     }
 
@@ -52,7 +49,7 @@ public class CONLLCorpusReader implements CorpusReader {
 
     @Override
     public List<TaggedToken> readSentence() throws IOException {
-        List<TaggedToken> sentence = new ArrayList<>(startMarkers);
+        List<TaggedToken> sentence = new ArrayList<>();
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -60,7 +57,6 @@ public class CONLLCorpusReader implements CorpusReader {
 
             // We are done with this sentence.
             if (parts.length == 0) {
-                sentence.addAll(endMarkers);
                 return sentence;
             }
 
@@ -68,15 +64,14 @@ public class CONLLCorpusReader implements CorpusReader {
                 throw new IOException(String.format("Line has fewer than five columns: %s", line));
 
             String word = parts[1];
-            if (decapitalizeFirstWord && sentence.size() == startMarkers.size())
+            if (decapitalizeFirstWord && sentence.isEmpty())
                 word = replaceCharAt(word, 0, Character.toLowerCase(word.charAt(0)));
 
             sentence.add(new TaggedToken(word, parts[4]));
         }
 
         // If the the file does not end with a blank line, we have left-overs.
-        if (sentence.size() != startMarkers.size()) {
-            sentence.addAll(endMarkers);
+        if (!sentence.isEmpty()) {
             return sentence;
         }
 

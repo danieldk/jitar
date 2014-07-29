@@ -65,15 +65,9 @@ public class Tag {
             String line;
 			while ((line = reader.readLine()) != null) {
 				String tokens[] = line.split("\\s+");
-				List<String> tokenList = new ArrayList<>(Arrays.asList(tokens));
-				
-				// Add start/end markers.
-				tokenList.add(0, "<START>");
-				tokenList.add(0, "<START>");
-				tokenList.add("<END>");
-				
+
 				List<String> tags =
-					HMMTagger.highestProbabilitySequence(tagger.viterbi(tokenList),
+					HMMTagger.highestProbabilitySequence(tagger.tag(Arrays.asList(tokens)),
 						model).sequence();
 				
 				System.out.println(StringUtils.join(tags.subList(2, tags.size() - 1), ' '));

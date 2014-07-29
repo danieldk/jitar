@@ -1,5 +1,6 @@
 package eu.danieldk.nlp.jitar.training;
 
+import eu.danieldk.nlp.jitar.corpus.Common;
 import eu.danieldk.nlp.jitar.corpus.CorpusReader;
 import eu.danieldk.nlp.jitar.corpus.TaggedToken;
 import eu.danieldk.nlp.jitar.data.BiGram;
@@ -46,6 +47,7 @@ public class FrequenciesCollector {
     public void process(CorpusReader reader) throws IOException {
         List<TaggedToken> sentence;
         while ((sentence = reader.readSentence()) != null) {
+            sentence = addMarkers(sentence);
             sentence = addCapitalTags(sentence);
 
             for (int i = 0; i < sentence.size(); ++i) {
@@ -57,6 +59,14 @@ public class FrequenciesCollector {
                     addTriGram(sentence, i);
             }
         }
+    }
+
+    private List<TaggedToken> addMarkers(List<TaggedToken> sentence) {
+        List<TaggedToken> sentenceMarked = new ArrayList<>();
+        sentenceMarked.addAll(Common.DEFAULT_START_MARKERS);
+        sentenceMarked.addAll(sentence);
+        sentenceMarked.addAll(Common.DEFAULT_END_MARKERS);
+        return sentenceMarked;
     }
 
     private List<TaggedToken> addCapitalTags(List<TaggedToken> sentence) {

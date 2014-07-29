@@ -14,6 +14,7 @@
 
 package eu.danieldk.nlp.jitar.tagger;
 
+import eu.danieldk.nlp.jitar.corpus.Common;
 import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.data.TriGram;
 import eu.danieldk.nlp.jitar.languagemodel.LanguageModel;
@@ -43,8 +44,6 @@ public class HMMTagger {
 
         public Map<TagMatrixEntry, TagMatrixEntry> bps =
                 new HashMap<>();
-        //public double prob;
-        //public TagMatrixEntry bp;
 
         public TagMatrixEntry(int tag) {
             this.tag = tag;
@@ -67,13 +66,16 @@ public class HMMTagger {
          * @return Sequence of part-of-speech tags.
          */
         public List<String> sequence() {
-            List<String> tagSequence = new ArrayList<>(d_sequence.size());
+            List<String> tagSequence = new ArrayList<>(d_sequence.size() - 3);
 
-            for (Integer tagNumber : d_sequence) {
+            for (int i = Common.DEFAULT_START_MARKER_TOKENS.size();
+                 i < d_sequence.size() - Common.DEFAULT_END_MARKER_TOKENS.size(); ++i) {
+                Integer tagNumber = d_sequence.get(i);
+
                 // Get the tag, remove capitalization information.
                 String tag = d_numberTags.get(tagNumber).substring(2);
-
                 tagSequence.add(tag);
+
             }
 
             return tagSequence;
@@ -161,11 +163,23 @@ public class HMMTagger {
     /**
      * Tag a sentence.
      *
+     * @return The trellis.
+     */
+    public List<List<TagMatrixEntry>> tag(List<String> sentence) {
+        List<String> tokens = new ArrayList<>(sentence);
+        tokens.addAll(0, Common.DEFAULT_START_MARKER_TOKENS);
+        tokens.addAll(Common.DEFAULT_END_MARKER_TOKENS);
+        return viterbi(tokens);
+    }
+
+    /**
+     * Tag a sentence.
+     *
      * @param sentence The actual sentence with two start markers, and preferably
      *                 one end marker.
      * @return The Viterbi matrix.
      */
-    public List<List<TagMatrixEntry>> viterbi(List<String> sentence) {
+    private List<List<TagMatrixEntry>> viterbi(List<String> sentence) {
         List<List<TagMatrixEntry>> tagMatrix = new ArrayList<>(sentence.size());
 
         int startTag = d_model.tagNumbers().get(sentence.get(0));
