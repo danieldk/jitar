@@ -52,7 +52,7 @@ public class CONLLCorpusReader implements CorpusReader {
 
     @Override
     public List<TaggedToken> readSentence() throws IOException {
-        List<TaggedToken> sentence = new ArrayList<TaggedToken>(startMarkers);
+        List<TaggedToken> sentence = new ArrayList<>(startMarkers);
 
         String line;
         while ((line = reader.readLine()) != null) {

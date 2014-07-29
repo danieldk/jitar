@@ -30,12 +30,12 @@ public class FrequenciesCollector {
     private final Map<TriGram, Integer> d_triGrams;
 
     public FrequenciesCollector() {
-        d_numberTags = new HashMap<Integer, String>();
-        d_tagNumbers = new HashMap<String, Integer>();
-        d_lexicon = new HashMap<String, Map<Integer, Integer>>();
-        d_uniGrams = new HashMap<UniGram, Integer>();
-        d_biGrams = new HashMap<BiGram, Integer>();
-        d_triGrams = new HashMap<TriGram, Integer>();
+        d_numberTags = new HashMap<>();
+        d_tagNumbers = new HashMap<>();
+        d_lexicon = new HashMap<>();
+        d_uniGrams = new HashMap<>();
+        d_biGrams = new HashMap<>();
+        d_triGrams = new HashMap<>();
     }
 
     public Model model()
@@ -74,7 +74,7 @@ public class FrequenciesCollector {
 
         Map<Integer, Integer> tagFreqs = d_lexicon.get(word);
         if (tagFreqs == null) {
-            tagFreqs = new HashMap<Integer, Integer>();
+            tagFreqs = new HashMap<>();
             d_lexicon.put(word, tagFreqs);
         }
 

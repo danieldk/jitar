@@ -56,17 +56,17 @@ public class Evaluate {
 
         HMMTagger tagger = new HMMTagger(model, wh, lm, 1000.0);
 
-        List<TaggedToken> startMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> startMarkers = new ArrayList<>();
         startMarkers.add(new TaggedToken("<START>", "<START>"));
         startMarkers.add(new TaggedToken("<START>", "<START>"));
-        List<TaggedToken> endMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> endMarkers = new ArrayList<>();
         endMarkers.add(new TaggedToken("<END>", "<END>"));
 
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(args[2]));
         } catch (FileNotFoundException e) {
-            System.err.println(String.format("Could not open corpus for reading:", e.getMessage()));
+            System.err.println(String.format("Could not open corpus for reading: %s", e.getMessage()));
             System.exit(1);
         }
 
@@ -75,13 +75,16 @@ public class Evaluate {
 
         CorpusReader corpusReader = null;
         try {
-            if (args[0].equals("brown"))
-                corpusReader = new BrownCorpusReader(reader, startMarkers, endMarkers, true);
-            else if (args[0].equals("conll"))
-                corpusReader = new CONLLCorpusReader(reader, startMarkers, endMarkers, true);
-            else {
-                System.err.println(String.format("Unknown corpus type:", args[0]));
-                System.exit(1);
+            switch (args[0]) {
+                case "brown":
+                    corpusReader = new BrownCorpusReader(reader, startMarkers, endMarkers, true);
+                    break;
+                case "conll":
+                    corpusReader = new CONLLCorpusReader(reader, startMarkers, endMarkers, true);
+                    break;
+                default:
+                    System.err.println(String.format("Unknown corpus type: %s", args[0]));
+                    System.exit(1);
             }
 
             evaluator.process(corpusReader);

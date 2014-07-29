@@ -40,9 +40,9 @@ public class HMMTagger {
 	private static class TagMatrixEntry {
 		public int tag;
 		public Map<TagMatrixEntry, Double> probs =
-			new HashMap<TagMatrixEntry, Double>();
+			new HashMap<>();
 		public Map<TagMatrixEntry, TagMatrixEntry> bps =
-			new HashMap<TagMatrixEntry, TagMatrixEntry>();
+			new HashMap<>();
 		//public double prob;
 		//public TagMatrixEntry bp;
 
@@ -67,7 +67,7 @@ public class HMMTagger {
 		 * @return Sequence of part-of-speech tags.
 		 */
 		public List<String> sequence() {
-			List<String> tagSequence = new ArrayList<String>(d_sequence.size());
+			List<String> tagSequence = new ArrayList<>(d_sequence.size());
 			
 			for (Integer tagNumber: d_sequence) {
 				tagSequence.add(d_numberTags.get(tagNumber));
@@ -134,17 +134,17 @@ public class HMMTagger {
     // We should always have a final state with some probability.
     assert tail != null;
 
-		List<Integer> tagSequence = new ArrayList<Integer>(tagMatrix.size());
-		
-		for (int i = 0; i < tagMatrix.size(); ++i) {
-			tagSequence.add(tail.tag);
-			
-			if (beforeTail != null) {
-				TagMatrixEntry tmp = tail.bps.get(beforeTail);
-				tail = beforeTail;
-				beforeTail = tmp;
-			}
-		}
+		List<Integer> tagSequence = new ArrayList<>(tagMatrix.size());
+
+        for (List<TagMatrixEntry> aTagMatrix : tagMatrix) {
+            tagSequence.add(tail.tag);
+
+            if (beforeTail != null) {
+                TagMatrixEntry tmp = tail.bps.get(beforeTail);
+                tail = beforeTail;
+                beforeTail = tmp;
+            }
+        }
 
 		Collections.reverse(tagSequence);
 		
@@ -158,7 +158,7 @@ public class HMMTagger {
 	 * @return The Viterbi matrix.
 	 */
 	public List<List<TagMatrixEntry>> viterbi(List<String> sentence) {
-		List<List<TagMatrixEntry>> tagMatrix = new ArrayList<List<TagMatrixEntry>>(sentence.size());
+		List<List<TagMatrixEntry>> tagMatrix = new ArrayList<>(sentence.size());
 
 		int startTag = d_model.tagNumbers().get(sentence.get(0));
 

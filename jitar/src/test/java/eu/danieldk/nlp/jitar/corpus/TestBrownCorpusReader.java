@@ -27,9 +27,9 @@ public class TestBrownCorpusReader {
     }
 
     private static BrownCorpusReader createReader(BufferedReader reader, boolean decapFirstWord) {
-        List<TaggedToken> startMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> startMarkers = new ArrayList<>();
         startMarkers.add(new TaggedToken("<START>", "<START>"));
-        List<TaggedToken> endMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> endMarkers = new ArrayList<>();
         endMarkers.add(new TaggedToken("<END>", "<END>"));
 
         return new BrownCorpusReader(reader, startMarkers, endMarkers, decapFirstWord);
@@ -124,7 +124,7 @@ public class TestBrownCorpusReader {
     }
 
     private class ReaderConsumer {
-        private List<List<TaggedToken>> d_sentences = new ArrayList<List<TaggedToken>>();
+        private List<List<TaggedToken>> d_sentences = new ArrayList<>();
 
         public void process(CorpusReader reader) throws IOException {
             List<TaggedToken> sentence;

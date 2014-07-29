@@ -125,11 +125,11 @@ public class Model implements Serializable {
     }
 
     private static NGrams readNGrams(BufferedReader reader) throws IOException {
-        Map<String, Integer> tagNumbers = new HashMap<String, Integer>();
-        Map<Integer, String> numberTags = new HashMap<Integer, String>();
-        Map<UniGram, Integer> uniGramFreqs = new HashMap<UniGram, Integer>();
-        Map<BiGram, Integer> biGramFreqs = new HashMap<BiGram, Integer>();
-        Map<TriGram, Integer> triGramFreqs = new HashMap<TriGram, Integer>();
+        Map<String, Integer> tagNumbers = new HashMap<>();
+        Map<Integer, String> numberTags = new HashMap<>();
+        Map<UniGram, Integer> uniGramFreqs = new HashMap<>();
+        Map<BiGram, Integer> biGramFreqs = new HashMap<>();
+        Map<TriGram, Integer> triGramFreqs = new HashMap<>();
 
         int tagNumber = 0;
         String line;
@@ -158,7 +158,7 @@ public class Model implements Serializable {
     private static Map<String, Map<Integer, Integer>> readWordTagFreqs(BufferedReader reader,
                                                                        Map<String, Integer> tagNumbers)
             throws IOException {
-        Map<String, Map<Integer, Integer>> wordTagFreqs = new HashMap<String, Map<Integer, Integer>>();
+        Map<String, Map<Integer, Integer>> wordTagFreqs = new HashMap<>();
 
         String line;
         while ((line = reader.readLine()) != null) {

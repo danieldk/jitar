@@ -45,10 +45,10 @@ public class LinearInterpolationLM implements LanguageModel {
 	public LinearInterpolationLM(Map<UniGram, Integer> uniGramFreqs,
 			Map<BiGram, Integer> biGramFreqs,
 			Map<TriGram, Integer> triGramFreqs) {
-		d_uniGramFreqs = new HashMap<UniGram, Integer>(uniGramFreqs);
-		d_biGramFreqs = new HashMap<BiGram, Integer>(biGramFreqs);
-		d_triGramFreqs = new HashMap<TriGram, Integer>(triGramFreqs);
-		d_triGramCache = new ConcurrentHashMap<TriGram, Double>();
+		d_uniGramFreqs = new HashMap<>(uniGramFreqs);
+		d_biGramFreqs = new HashMap<>(biGramFreqs);
+		d_triGramFreqs = new HashMap<>(triGramFreqs);
+		d_triGramCache = new ConcurrentHashMap<>();
 		
 		calculateCorpusSize();
 		calculateLambdas();

@@ -35,7 +35,7 @@ public class KnownWordHandler implements WordHandler {
 	 */
 	public KnownWordHandler(Map<String, Map<Integer, Integer>> wordTagFreqs,
 			Map<UniGram, Integer> uniGramFreqs, WordHandler fallbackWordHandler) {
-		d_wordTagProbs = new HashMap<String, Map<Integer,Double>>();
+		d_wordTagProbs = new HashMap<>();
 		calculateWordTagProbs(wordTagFreqs, uniGramFreqs);
 		
 		d_fallbackWordHandler = fallbackWordHandler;
@@ -50,21 +50,21 @@ public class KnownWordHandler implements WordHandler {
 		// Lookup the word. If it is known, return P(w|t) probabilities for
 		// each tag that the word was seen with in the training data.
 		if (d_wordTagProbs.containsKey(word))
-				return new HashMap<Integer, Double>(d_wordTagProbs.get(word));
+				return new HashMap<>(d_wordTagProbs.get(word));
 
 		// If the word could not be found, maybe its lowercase variant can
 		// be found (e.g. capitalized words that start a sentence).
 		if (Character.isUpperCase(word.charAt(0))) {
 			String lcWord = word.toLowerCase();
 			if (d_wordTagProbs.containsKey(lcWord))
-				return new HashMap<Integer, Double>(d_wordTagProbs.get(lcWord));
+				return new HashMap<>(d_wordTagProbs.get(lcWord));
 		}
 
 		// Try the fallback word handler, if it is available.
 		if (d_fallbackWordHandler != null)
 			return d_fallbackWordHandler.tagProbs(word);
 		else
-			return new HashMap<Integer, Double>();
+			return new HashMap<>();
 	}
 	
 	private void calculateWordTagProbs(Map<String, Map<Integer, Integer>> wordTagFreqs,

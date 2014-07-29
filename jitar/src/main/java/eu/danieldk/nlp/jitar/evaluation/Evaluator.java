@@ -52,7 +52,7 @@ public class Evaluator {
     public void process(CorpusReader reader) throws IOException {
         List<TaggedToken> sentence;
         while ((sentence = reader.readSentence()) != null) {
-            ArrayList<String> sentenceWords = new ArrayList<String>(sentence.size());
+            ArrayList<String> sentenceWords = new ArrayList<>(sentence.size());
             for (TaggedToken taggedWord : sentence)
                 sentenceWords.add(taggedWord.word());
 

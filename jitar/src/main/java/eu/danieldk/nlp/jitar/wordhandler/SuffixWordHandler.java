@@ -100,11 +100,11 @@ public class SuffixWordHandler implements WordHandler {
 		}
 		
 		Set<Entry<Integer, Double>> orderedTags =
-			new TreeSet<Entry<Integer,Double>>(new ProbEntryComparator());
+			new TreeSet<>(new ProbEntryComparator());
 		orderedTags.addAll(suffixTree.suffixTagProbs(word).entrySet());
 		
 		// Get first N results, ordered by descending probability.
-		Map<Integer, Double> results = new HashMap<Integer, Double>();
+		Map<Integer, Double> results = new HashMap<>();
 		Iterator<Entry<Integer, Double>> iter = orderedTags.iterator();
 		for (int i = 0; i < d_maxTags && iter.hasNext(); ++i) {
 			Entry<Integer, Double> entry = iter.next();

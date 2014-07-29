@@ -62,7 +62,7 @@ public class BrownCorpusReader implements CorpusReader {
             if (line.length() == 0)
                 continue;
 
-            List<TaggedToken> sentence = new ArrayList<TaggedToken>(startMarkers);
+            List<TaggedToken> sentence = new ArrayList<>(startMarkers);
 
             String[] lineParts = line.split("\\s+");
             for (int i = 0; i < lineParts.length; ++i) {

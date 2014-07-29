@@ -25,12 +25,12 @@ import java.util.Map;
 public class TestKnownWordHandler {
   @Before
   public void initialize() {
-    Map<UniGram, Integer> uniFreqs = new HashMap<UniGram, Integer>();
+    Map<UniGram, Integer> uniFreqs = new HashMap<>();
     uniFreqs.put(new UniGram(0), 2);
     uniFreqs.put(new UniGram(1), 4);
 
-    Map<String, Map<Integer, Integer>> wordFreqs = new HashMap<String, Map<Integer, Integer>>();
-    Map<Integer, Integer> freqs = new HashMap<Integer, Integer>();
+    Map<String, Map<Integer, Integer>> wordFreqs = new HashMap<>();
+    Map<Integer, Integer> freqs = new HashMap<>();
     freqs.put(0, 1);
     freqs.put(1, 1);
     wordFreqs.put("test", freqs);
@@ -44,9 +44,9 @@ public class TestKnownWordHandler {
   @Test
   public void testProbability() {
     Map<Integer, Double> probs = d_wordHandler.tagProbs("test");
-    Assert.assertEquals("Unexpected probability", Math.log(1./2.), probs.get(0).doubleValue(),
+    Assert.assertEquals("Unexpected probability", Math.log(1./2.), probs.get(0),
         Math.ulp(Math.log(1./2.)));
-    Assert.assertEquals("Unexpected probability", Math.log(1./4.), probs.get(1).doubleValue(),
+    Assert.assertEquals("Unexpected probability", Math.log(1./4.), probs.get(1),
         Math.ulp(Math.log(1./2.)));
   }
 

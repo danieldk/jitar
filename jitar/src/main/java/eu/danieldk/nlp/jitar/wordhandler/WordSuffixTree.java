@@ -30,8 +30,8 @@ class WordSuffixTree {
 		private int d_tagFreq;
 		
 		public TreeNode() {
-			d_children = new HashMap<Character, TreeNode>();
-			d_tagFreqs = new HashMap<Integer, Integer>();
+			d_children = new HashMap<>();
+			d_tagFreqs = new HashMap<>();
 			d_tagFreq = 0;
 		}
 		
@@ -97,7 +97,7 @@ class WordSuffixTree {
 	}
 	
 	private Map<Integer, Double> bayesianInversion(Map<Integer, Double> tagProbs) {
-		Map<Integer, Double> inverseTagProbs = new HashMap<Integer, Double>();
+		Map<Integer, Double> inverseTagProbs = new HashMap<>();
 		
 		for (Entry<Integer, Double> tagProb: tagProbs.entrySet()) {
 			Integer tag = tagProb.getKey();
@@ -116,7 +116,7 @@ class WordSuffixTree {
 	
 	public WordSuffixTree(Map<UniGram, Integer> uniGrams, double theta,
 			int maxLength) {
-		d_uniGrams = new HashMap<UniGram, Integer>(uniGrams);
+		d_uniGrams = new HashMap<>(uniGrams);
 		d_theta = theta;
 		d_maxLength = maxLength;
 		d_root = new TreeNode();

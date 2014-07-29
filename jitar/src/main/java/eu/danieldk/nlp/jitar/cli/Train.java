@@ -18,17 +18,12 @@ import eu.danieldk.nlp.jitar.corpus.BrownCorpusReader;
 import eu.danieldk.nlp.jitar.corpus.CONLLCorpusReader;
 import eu.danieldk.nlp.jitar.corpus.CorpusReader;
 import eu.danieldk.nlp.jitar.corpus.TaggedToken;
-import eu.danieldk.nlp.jitar.data.BiGram;
 import eu.danieldk.nlp.jitar.data.Model;
-import eu.danieldk.nlp.jitar.data.TriGram;
-import eu.danieldk.nlp.jitar.data.UniGram;
 import eu.danieldk.nlp.jitar.training.FrequenciesCollector;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class Train {
     public static void main(String[] args) throws IOException {
@@ -37,30 +32,33 @@ public class Train {
             System.exit(1);
         }
 
-        List<TaggedToken> startMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> startMarkers = new ArrayList<>();
         startMarkers.add(new TaggedToken("<START>", "<START>"));
         startMarkers.add(new TaggedToken("<START>", "<START>"));
-        List<TaggedToken> endMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> endMarkers = new ArrayList<>();
         endMarkers.add(new TaggedToken("<END>", "<END>"));
 
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new FileReader(args[1]));
         } catch (FileNotFoundException e) {
-            System.err.println(String.format("Could not open corpus for reading:", e.getMessage()));
+            System.err.println(String.format("Could not open corpus for reading: %s", e.getMessage()));
             System.exit(1);
         }
 
         FrequenciesCollector frequenciesCollector = new FrequenciesCollector();
         CorpusReader corpusReader = null;
         try {
-            if (args[0].equals("brown"))
-                corpusReader = new BrownCorpusReader(reader, startMarkers, endMarkers, true);
-            else if (args[0].equals("conll"))
-                corpusReader = new CONLLCorpusReader(reader, startMarkers, endMarkers, true);
-            else {
-                System.err.println(String.format("Unknown corpus type:", args[0]));
-                System.exit(1);
+            switch (args[0]) {
+                case "brown":
+                    corpusReader = new BrownCorpusReader(reader, startMarkers, endMarkers, true);
+                    break;
+                case "conll":
+                    corpusReader = new CONLLCorpusReader(reader, startMarkers, endMarkers, true);
+                    break;
+                default:
+                    System.err.println(String.format("Unknown corpus type: %s", args[0]));
+                    System.exit(1);
             }
 
             frequenciesCollector.process(corpusReader);
@@ -74,16 +72,12 @@ public class Train {
 
         Model model = frequenciesCollector.model();
 
-        ObjectOutputStream oos = null;
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream(args[2]));
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(args[2]))) {
             oos.writeObject(model);
         } catch (IOException e) {
             System.out.println("Could not write model!");
             e.printStackTrace();
             System.exit(1);
-        } finally {
-            oos.close();
         }
     }
 

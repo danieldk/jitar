@@ -17,8 +17,6 @@ package eu.danieldk.nlp.jitar.cli;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -68,7 +66,7 @@ public class Tag {
 		try {
 			while ((line = reader.readLine()) != null) {
 				String tokens[] = line.split("\\s+");
-				List<String> tokenList = new ArrayList<String>(Arrays.asList(tokens));
+				List<String> tokenList = new ArrayList<>(Arrays.asList(tokens));
 				
 				// Add start/end markers.
 				tokenList.add(0, "<START>");
@@ -81,7 +79,7 @@ public class Tag {
 				
 				System.out.println(StringUtils.join(tags.subList(2, tags.size() - 1), ' '));
 			}
-		} catch (IOException e) {
+		} catch (IOException ignored) {
 		}
 	}
 }

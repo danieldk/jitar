@@ -49,7 +49,7 @@ public class CrossValidation {
         String corpusType = args[0];
         String corpusFilename = args[1];
 
-        List<Double> overallPrecs = new ArrayList<Double>();
+        List<Double> overallPrecs = new ArrayList<>();
 
         // Todo: make the number of folds a command-line argument.
         for (int evalFold = 0; evalFold < N_FOLDS; ++evalFold) {
@@ -73,7 +73,7 @@ public class CrossValidation {
             CorpusReader evalCorpusReader = null;
             try {
                 evalCorpusReader = newCorpusReader(corpusType, new File(corpusFilename), startMarkers, endMarkers);
-                Set<Integer> evalFolds = new HashSet<Integer>();
+                Set<Integer> evalFolds = new HashSet<>();
                 evalFolds.add(evalFold);
                 evalCorpusReader = new SplittingCorpusReader(evalCorpusReader, N_FOLDS, evalFolds);
 
@@ -111,7 +111,7 @@ public class CrossValidation {
     }
 
     private static Set<Integer> getTrainingFolds(int trainFold) {
-        Set<Integer> trainingFolds = new HashSet<Integer>();
+        Set<Integer> trainingFolds = new HashSet<>();
         for (int fold = 0; fold < N_FOLDS; ++fold)
             if (fold != trainFold)
                 trainingFolds.add(fold);
@@ -121,24 +121,27 @@ public class CrossValidation {
     private static CorpusReader newCorpusReader(String corpusType, File corpus, List<TaggedToken> startMarkers,
                                                 List<TaggedToken> endMarkers) throws IOException {
         CorpusReader corpusReader;
-        if (corpusType.equals("brown"))
-            corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
-        else if (corpusType.equals("conll"))
-            corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
-        else {
-            throw new IOException(String.format("Unknown corpus type:", corpusType));
+        switch (corpusType) {
+            case "brown":
+                corpusReader = new BrownCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
+                break;
+            case "conll":
+                corpusReader = new CONLLCorpusReader(new BufferedReader(new FileReader(corpus)), startMarkers, endMarkers, true);
+                break;
+            default:
+                throw new IOException(String.format("Unknown corpus type: %s", corpusType));
         }
         return corpusReader;
     }
 
     private static List<TaggedToken> getEndMarkers() {
-        List<TaggedToken> endMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> endMarkers = new ArrayList<>();
         endMarkers.add(new TaggedToken("<END>", "<END>"));
         return endMarkers;
     }
 
     private static List<TaggedToken> getStartMarkers() {
-        List<TaggedToken> startMarkers = new ArrayList<TaggedToken>();
+        List<TaggedToken> startMarkers = new ArrayList<>();
         startMarkers.add(new TaggedToken("<START>", "<START>"));
         startMarkers.add(new TaggedToken("<START>", "<START>"));
         return startMarkers;

@@ -54,6 +54,6 @@ public class SplittingCorpusReader implements CorpusReader {
                 return sentence;
         }
 
-        return sentence; // null
+        return null;
     }
 }
