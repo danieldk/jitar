@@ -162,6 +162,13 @@ public class HMMTagger {
     }
 
     /**
+     * Return the model used by the tagger.
+     */
+    public Model model() {
+        return d_model;
+    }
+
+    /**
      * Tag a sentence.
      *
      * @return The trellis.
