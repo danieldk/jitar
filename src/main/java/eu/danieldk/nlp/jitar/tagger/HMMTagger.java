@@ -36,16 +36,16 @@ public class HMMTagger {
 
     private final double d_beamFactor;
 
-    private static class TagMatrixEntry {
+    private static class TrellisState {
         public int tag;
 
-        public Map<TagMatrixEntry, Double> probs =
+        public Map<TrellisState, Double> probabilities =
                 new HashMap<>();
 
-        public Map<TagMatrixEntry, TagMatrixEntry> bps =
+        public Map<TrellisState, TrellisState> backPointers =
                 new HashMap<>();
 
-        public TagMatrixEntry(int tag) {
+        public TrellisState(int tag) {
             this.tag = tag;
         }
     }
@@ -111,27 +111,25 @@ public class HMMTagger {
         d_wordHandler = wordHandler;
         d_model = model;
         d_languageModel = languageModel;
-        d_beamFactor = Math.log(beamFactor);
+        d_beamFactor = beamFactor;
     }
 
     /**
      * Extract the most probable sequence from a tag matrix.
      *
-     * @param tagMatrix The Viterbi matrix.
+     * @param trellis The Viterbi trellis.
      * @return The tag sequence with the highest probability.
      */
-    public static Sequence highestProbabilitySequence(List<List<TagMatrixEntry>> tagMatrix,
+    public static Sequence highestProbabilitySequence(List<TrellisState> trellis,
                                                       Model model) {
         // Find the most probably final state.
         double highestProb = Double.NEGATIVE_INFINITY;
-        TagMatrixEntry tail = null;
-        TagMatrixEntry beforeTail = null;
-
-        List<TagMatrixEntry> lastColumn = tagMatrix.get(tagMatrix.size() - 1);
+        TrellisState tail = null;
+        TrellisState beforeTail = null;
 
         // Find the most probable state in the last column.
-        for (TagMatrixEntry entry : lastColumn) {
-            for (Map.Entry<TagMatrixEntry, Double> probEntry : entry.probs.entrySet()) {
+        for (TrellisState entry : trellis) {
+            for (Map.Entry<TrellisState, Double> probEntry : entry.probabilities.entrySet()) {
                 if (probEntry.getValue() > highestProb) {
                     highestProb = probEntry.getValue();
                     tail = entry;
@@ -143,16 +141,17 @@ public class HMMTagger {
         // We should always have a final state with some probability.
         assert tail != null;
 
-        List<Integer> tagSequence = new ArrayList<>(tagMatrix.size());
+        List<Integer> tagSequence = new ArrayList<>(trellis.size());
 
-        for (List<TagMatrixEntry> aTagMatrix : tagMatrix) {
+        while (true) {
             tagSequence.add(tail.tag);
 
-            if (beforeTail != null) {
-                TagMatrixEntry tmp = tail.bps.get(beforeTail);
-                tail = beforeTail;
-                beforeTail = tmp;
-            }
+            if (beforeTail == null)
+                break;
+
+            TrellisState tmp = tail.backPointers.get(beforeTail);
+            tail = beforeTail;
+            beforeTail = tmp;
         }
 
         Collections.reverse(tagSequence);
@@ -165,7 +164,7 @@ public class HMMTagger {
      *
      * @return The trellis.
      */
-    public List<List<TagMatrixEntry>> tag(List<String> sentence) {
+    public List<TrellisState> tag(List<String> sentence) {
         List<String> tokens = new ArrayList<>(sentence);
         tokens.addAll(0, Common.DEFAULT_START_MARKER_TOKENS);
         tokens.addAll(Common.DEFAULT_END_MARKER_TOKENS);
@@ -177,22 +176,21 @@ public class HMMTagger {
      *
      * @param sentence The actual sentence with two start markers, and preferably
      *                 one end marker.
-     * @return The Viterbi matrix.
+     * @return The Viterbi trellis.
      */
-    private List<List<TagMatrixEntry>> viterbi(List<String> sentence) {
-        List<List<TagMatrixEntry>> tagMatrix = new ArrayList<>(sentence.size());
+    private List<TrellisState> viterbi(List<String> sentence) {
+        List<TrellisState> trellis = new ArrayList<>();
 
         int startTag = d_model.tagNumbers().get(sentence.get(0));
 
-        // Prepare initial matrix entries;
-        TagMatrixEntry firstEntry = new TagMatrixEntry(startTag);
-        tagMatrix.add(new ArrayList<TagMatrixEntry>(1));
-        tagMatrix.get(0).add(firstEntry);
+        // Prepare initial trellis states;
+        TrellisState initialState = new TrellisState(startTag);
 
-        tagMatrix.add(new ArrayList<TagMatrixEntry>(1));
-        tagMatrix.get(1).add(new TagMatrixEntry(startTag));
-        tagMatrix.get(1).get(0).probs.put(firstEntry, 0.0);
-        tagMatrix.get(1).get(0).bps.put(firstEntry, null);
+        TrellisState initialState2 = new TrellisState(startTag);
+        initialState2.probabilities.put(initialState, 0.0);
+        initialState2.backPointers.put(initialState, null);
+
+        trellis.add(initialState2);
 
         double beam = 0.0;
 
@@ -200,18 +198,18 @@ public class HMMTagger {
         for (int i = 2; i < sentence.size(); ++i) {
             double columnHighestProb = Double.NEGATIVE_INFINITY;
 
-            tagMatrix.add(new ArrayList<TagMatrixEntry>());
+            List<TrellisState> newTrellis = new ArrayList<>();
 
             for (Entry<Integer, Double> tagEntry :
                     d_wordHandler.tagProbs(sentence.get(i)).entrySet()) {
-                TagMatrixEntry newEntry = new TagMatrixEntry(tagEntry.getKey());
+                TrellisState newEntry = new TrellisState(tagEntry.getKey());
 
                 // Loop over all possible trigrams
-                for (TagMatrixEntry t2 : tagMatrix.get(i - 1)) {
+                for (TrellisState t2 : trellis) {
                     double highestProb = Double.NEGATIVE_INFINITY;
-                    TagMatrixEntry highestProbBp = null;
+                    TrellisState highestProbBp = null;
 
-                    for (Map.Entry<TagMatrixEntry, Double> t1Entry : t2.probs.entrySet()) {
+                    for (Map.Entry<TrellisState, Double> t1Entry : t2.probabilities.entrySet()) {
                         if (t1Entry.getValue() < beam)
                             continue;
 
@@ -227,19 +225,20 @@ public class HMMTagger {
                         }
                     }
 
-                    newEntry.probs.put(t2, highestProb);
-                    newEntry.bps.put(t2, highestProbBp);
+                    newEntry.probabilities.put(t2, highestProb);
+                    newEntry.backPointers.put(t2, highestProbBp);
 
                     if (highestProb > columnHighestProb)
                         columnHighestProb = highestProb;
                 }
 
-                tagMatrix.get(i).add(newEntry);
+                newTrellis.add(newEntry);
             }
 
+            trellis = newTrellis;
             beam = columnHighestProb - d_beamFactor;
         }
 
-        return tagMatrix;
+        return trellis;
     }
 }
