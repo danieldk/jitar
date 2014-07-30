@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>eu.danieldk.nlp.jitar</groupId>
-    <artifactId>jitar-parent</artifactId>
+    <artifactId>jitar</artifactId>
     <version>0.3.0-SNAPSHOT</version>
     <name>Jitar part-of-speech tagger</name>
     <description>Jitar is an HMM trigram part-of-speech tagger</description>
