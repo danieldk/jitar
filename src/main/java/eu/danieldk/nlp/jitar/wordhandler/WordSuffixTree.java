@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 import eu.danieldk.nlp.jitar.data.UniGram;
 
 /**
- * <t>WordSuffixTree</t> is used to store words in a suffix tree.
+ * <t>WordSuffixTree</t> is used to store words tree of suffixes.
  */
 class WordSuffixTree {
 	private class TreeNode {
