@@ -32,15 +32,15 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Tag {
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.out.println("Tag lexicon ngrams");
+		if (args.length != 1) {
+			System.out.println("tag model");
 			System.exit(1);
 		}
 
 		// Load the model.
         Model model = null;
         try {
-            model = Model.readModel(new File(args[1]));
+            model = Model.readModel(new File(args[0]));
         } catch (IOException e) {
             System.out.println("Unable to read training data!");
             e.printStackTrace();
@@ -71,7 +71,7 @@ public class Tag {
 					HMMTagger.highestProbabilitySequence(tagger.tag(Arrays.asList(tokens)),
 						model).sequence();
 				
-				System.out.println(StringUtils.join(tags.subList(2, tags.size() - 1), ' '));
+				System.out.println(StringUtils.join(tags, ' '));
 			}
 		} catch (IOException ignored) {
 		}
