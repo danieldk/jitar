@@ -27,6 +27,7 @@
         <fileSet>
             <includes>
                 <include>NOTICE</include>
+                <include>README.markdown</include>
             </includes>
         </fileSet>
         <fileSet>
