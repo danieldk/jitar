@@ -33,9 +33,10 @@
             <directory>${project.basedir}/src/main/assembly/bin</directory>
             <outputDirectory>/bin</outputDirectory>
             <includes>
-                <include>evaluate</include>
-                <include>tag</include>
-                <include>train</include>
+                <include>jitar-cross-validate</include>
+                <include>jitar-evaluate</include>
+                <include>jitar-tag</include>
+                <include>jitar-train</include>
             </includes>
             <useDefaultExcludes>true</useDefaultExcludes>
         </fileSet>
