@@ -50,13 +50,9 @@ A model can be created from a corpus that includes part of speech
 tags, such as the Brown corpus. The model can be created easily with
 the training program:
 
-    bin/train brown my_brown_corpus lexicon ngrams
+    bin/train brown my_brown_corpus my_corpus.model
 
-Replace *brown* by *conll* if you are using a corpus in CoNLL format.  The
-*lexicon* and *ngrams* files will be created and form the model.
-
-Sample models are included in the *models* directory of the jitar
-project.
+Replace *brown* by *conll* if you are using a corpus in CoNLL format.
 
 ## Tagging
 
@@ -79,7 +75,7 @@ API stability for a given *x* in *x.y.z* when *x >= 1*.
 * Use Dictomaton to store the lexicon and suffixes for unknown words.
 * Compute interpolated scores only once.
 
-### 0.3.0 (Planned)
+### 0.3.0
 
 * Add a capitalization marking to tags (as per the TnT paper). This gives
   and improvement of around .2% on German and English.
@@ -87,7 +83,7 @@ API stability for a given *x* in *x.y.z* when *x >= 1*.
   This provides a modest improvement for English and German.
 * API simplification (no more need to use/specify start and end markers).
 
-### 0.2.0
+### 0.2.0 (Never released)
 
 * Java-style corpus readers.
 * Unified training and tagging data structures.
