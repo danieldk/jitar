@@ -62,7 +62,7 @@ tagger reads pretokenized sentences from the standard input (one
 sentence per line), and will print the best scoring tag sequence to
 the standard output. For example:
 
-    $ echo "The cat is on the mat ." | bin/tag lexicon ngrams
+    $ echo "The cat is on the mat ." | bin/tag model
     AT NN BEZ IN AT NN .
 
 ## Release plan
