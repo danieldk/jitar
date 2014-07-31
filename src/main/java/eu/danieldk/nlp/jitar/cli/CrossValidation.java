@@ -24,7 +24,7 @@ import eu.danieldk.nlp.jitar.languagemodel.LanguageModel;
 import eu.danieldk.nlp.jitar.languagemodel.LinearInterpolationLM;
 import eu.danieldk.nlp.jitar.tagger.HMMTagger;
 import eu.danieldk.nlp.jitar.training.FrequenciesCollector;
-import eu.danieldk.nlp.jitar.wordhandler.KnownWordHandler;
+import eu.danieldk.nlp.jitar.wordhandler.LexiconWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.SuffixWordHandler;
 import eu.danieldk.nlp.jitar.wordhandler.WordHandler;
 
@@ -69,7 +69,7 @@ public class CrossValidation {
 
                 SuffixWordHandler swh = new SuffixWordHandler(model.lexicon(), model.uniGrams(),
                         2, 2, 8, 4, 10, 10);
-                WordHandler wh = new KnownWordHandler(model.lexicon(), model.uniGrams(), swh);
+                WordHandler wh = new LexiconWordHandler(model.lexicon(), model.uniGrams(), swh);
                 LanguageModel lm = new LinearInterpolationLM(model.uniGrams(),
                         model.biGrams(), model.triGrams());
                 HMMTagger tagger = new HMMTagger(model, wh, lm, 1000.0);

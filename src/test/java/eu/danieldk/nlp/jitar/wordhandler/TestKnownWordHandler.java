@@ -38,8 +38,8 @@ public class TestKnownWordHandler {
     wordFreqs.put("test", freqs);
 
 
-    d_wordHandler = new KnownWordHandler(wordFreqs, uniFreqs);
-    d_wordHandlerWithFallback = new KnownWordHandler(wordFreqs, uniFreqs,
+    d_wordHandler = new LexiconWordHandler(wordFreqs, uniFreqs);
+    d_wordHandlerWithFallback = new LexiconWordHandler(wordFreqs, uniFreqs,
         new SuffixWordHandler(wordFreqs, uniFreqs, 2, 5, 5, 10, 5, 5));
   }
 
