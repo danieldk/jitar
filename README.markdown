@@ -28,20 +28,20 @@ Maven:
 <dependency>
     <groupId>eu.danieldk.nlp.jitar</groupId>
     <artifactId>jitar</artifactId>
-    <version>0.1.0</version>
+    <version>0.3.0</version>
 </dependency>
 ~~~
 
 SBT:
 
 ~~~
-libraryDependencies += "eu.danieldk.nlp.jitar" % "jitar" % "0.1.0"
+libraryDependencies += "eu.danieldk.nlp.jitar" % "jitar" % "0.3.0"
 ~~~
 
 Grails:
 
 ~~~
-compile 'eu.danieldk.nlp.jitar:jitar:0.1.0'
+compile 'eu.danieldk.nlp.jitar:jitar:0.3.0'
 ~~~
 
 ## Training
