@@ -16,7 +16,7 @@
 
 package eu.danieldk.nlp.jitar.corpus;
 
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.base.Splitter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CONLLCorpusReader implements CorpusReader {
+    private static final Splitter TAB_SPLITTER = Splitter.on('\t').trimResults().omitEmptyStrings();
+
     private final BufferedReader reader;
 
     boolean decapitalizeFirstWord;
@@ -55,21 +57,21 @@ public class CONLLCorpusReader implements CorpusReader {
 
         String line;
         while ((line = reader.readLine()) != null) {
-            String parts[] = StringUtils.split(line.trim(), '\t');
+            List<String> parts = TAB_SPLITTER.splitToList(line);
 
             // We are done with this sentence.
-            if (parts.length == 0) {
+            if (parts.size() == 0) {
                 return sentence;
             }
 
-            if (parts.length < 5)
+            if (parts.size() < 5)
                 throw new IOException(String.format("Line has fewer than five columns: %s", line));
 
-            String word = parts[1];
+            String word = parts.get(1);
             if (decapitalizeFirstWord && sentence.isEmpty())
                 word = replaceCharAt(word, 0, Character.toLowerCase(word.charAt(0)));
 
-            sentence.add(new TaggedToken(word, parts[4]));
+            sentence.add(new TaggedToken(word, parts.get(4)));
         }
 
         // If the the file does not end with a blank line, we have left-overs.
