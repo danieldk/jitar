@@ -26,7 +26,7 @@
 
     <groupId>eu.danieldk.nlp.jitar</groupId>
     <artifactId>jitar</artifactId>
-    <version>0.3.3-SNAPSHOT</version>
+    <version>0.3.2-SNAPSHOT</version>
     <name>Jitar part-of-speech tagger</name>
     <description>Jitar is an HMM trigram part-of-speech tagger</description>
     <url>http://github.com/danieldk/jitar</url>
