@@ -57,7 +57,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <currentYear>2014</currentYear>
+        <currentYear>2015</currentYear>
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
 
     <dependencies>
@@ -65,6 +66,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.danieldk.nlp</groupId>
+            <artifactId>conllx-io</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

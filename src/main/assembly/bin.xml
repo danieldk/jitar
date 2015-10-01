@@ -37,6 +37,7 @@
                 <include>jitar-cross-validate</include>
                 <include>jitar-evaluate</include>
                 <include>jitar-tag</include>
+                <include>jitar-tag-conllx</include>
                 <include>jitar-train</include>
             </includes>
             <useDefaultExcludes>true</useDefaultExcludes>
