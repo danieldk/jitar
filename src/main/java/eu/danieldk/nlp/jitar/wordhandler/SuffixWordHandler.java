@@ -16,6 +16,8 @@
 
 package eu.danieldk.nlp.jitar.wordhandler;
 
+import eu.danieldk.nlp.jitar.corpus.Common;
+import eu.danieldk.nlp.jitar.data.Model;
 import eu.danieldk.nlp.jitar.data.UniGram;
 import eu.danieldk.nlp.jitar.data.util.ProbEntryComparator;
 
@@ -35,8 +37,7 @@ public class SuffixWordHandler implements WordHandler {
      * Construct a suffix word handler from a lexicon and the over unigram
      * frequency list for the corpus.
      *
-     * @param lexicon         The lexicon.
-     * @param uniGrams        Unigram tag frequencies.
+     * @param model           The model.
      * @param upperMaxFreq    Uppercase words with a frequency lower than or equal
      *                        to this value will be used for suffix training.
      * @param lowerMaxFreq    Lowercase words with a frequency lower than or equal
@@ -44,19 +45,26 @@ public class SuffixWordHandler implements WordHandler {
      * @param dashMaxFreq
      * @param cardinalMaxFreq Cardinals with a frequency lower than or equal
      */
-    public SuffixWordHandler(Map<String, Map<Integer, Integer>> lexicon,
-                             Map<UniGram, Integer> uniGrams, int maxSuffixLength, int upperMaxFreq,
+    public SuffixWordHandler(Model model, int maxSuffixLength, int upperMaxFreq,
                              int lowerMaxFreq, int dashMaxFreq, int maxTags, int cardinalMaxFreq) {
-        double theta = WordSuffixTree.calculateTheta(uniGrams);
+        Set<Integer> skip = new HashSet<>();
+        skip.add(model.tagNumbers().get(Common.START_TOKEN));
+        skip.add(model.tagNumbers().get(Common.END_TOKEN));
 
-        d_upperSuffixTrie = new WordSuffixTree(uniGrams, theta, maxSuffixLength);
-        d_lowerSuffixTrie = new WordSuffixTree(uniGrams, theta, maxSuffixLength);
-        d_dashSuffixTrie = new WordSuffixTree(uniGrams, theta, maxSuffixLength);
-        d_cardinalSuffixTrie = new WordSuffixTree(uniGrams, theta, maxSuffixLength);
+        double theta = WordSuffixTree.calculateTheta(model.uniGrams(), skip);
+
+        d_upperSuffixTrie = new WordSuffixTree(model.uniGrams(), skip, theta, maxSuffixLength);
+        d_lowerSuffixTrie = new WordSuffixTree(model.uniGrams(), skip, theta, maxSuffixLength);
+        d_dashSuffixTrie = new WordSuffixTree(model.uniGrams(), skip, theta, maxSuffixLength);
+        d_cardinalSuffixTrie = new WordSuffixTree(model.uniGrams(), skip, theta, maxSuffixLength);
         d_maxTags = maxTags;
 
-        for (Entry<String, Map<Integer, Integer>> wordEntry : lexicon.entrySet()) {
+        for (Entry<String, Map<Integer, Integer>> wordEntry : model.lexicon().entrySet()) {
             String word = wordEntry.getKey();
+
+            // We don't want to treat start/end markers as words.
+            if (word.equals(Common.START_TOKEN) || word.equals(Common.END_TOKEN))
+                continue;
 
             // Incorrect lexicon entry.
             if (word.length() == 0)

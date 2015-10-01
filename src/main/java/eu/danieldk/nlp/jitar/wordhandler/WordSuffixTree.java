@@ -19,6 +19,7 @@ package eu.danieldk.nlp.jitar.wordhandler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import eu.danieldk.nlp.jitar.data.UniGram;
 
@@ -116,7 +117,7 @@ class WordSuffixTree {
 	private final int d_maxLength;
 	private double d_theta;
 	
-	public WordSuffixTree(Map<UniGram, Integer> uniGrams, double theta,
+	public WordSuffixTree(Map<UniGram, Integer> uniGrams, Set<Integer> skip, double theta,
 			int maxLength) {
 		d_uniGrams = new HashMap<>(uniGrams);
 		d_theta = theta;
@@ -125,16 +126,15 @@ class WordSuffixTree {
 		
 		for (Entry<UniGram, Integer> uniGramFreq: d_uniGrams.entrySet())
 		{
+			if (skip.contains(uniGramFreq.getKey().t1()))
+				continue;
+
 			d_root.d_tagFreqs.put(uniGramFreq.getKey().t1(),
 					uniGramFreq.getValue());
 			d_root.d_tagFreq += uniGramFreq.getValue();
 		}
 	}
-	
-	public WordSuffixTree(Map<UniGram, Integer> uniGrams, double theta) {
-		this(uniGrams, theta, 10);
-	}
-	
+
 	public void addWord(String word, Map<Integer, Integer> tagFreqs) {
 		String reverseWord = reverse(word);
 	
@@ -153,15 +153,22 @@ class WordSuffixTree {
 		return d_root.suffixTagProbs(reverseWord, new HashMap<Integer, Double>());
 	}
 	
-	public static double calculateTheta(Map<UniGram, Integer> uniGrams) {
+	public static double calculateTheta(Map<UniGram, Integer> uniGrams, Set<Integer> skip) {
 		double pAvg = 1.0 / uniGrams.size();
 		
 		int freqSum = 0;
-		for (Entry<UniGram, Integer> entry: uniGrams.entrySet())
+		for (Entry<UniGram, Integer> entry: uniGrams.entrySet()) {
+			if (skip.contains(entry.getKey().t1()))
+				continue;
+
 			freqSum += entry.getValue();
+		}
 		
 		double stdDevSum = 0.0;
 		for (Entry<UniGram, Integer> entry: uniGrams.entrySet()) {
+			if (skip.contains(entry.getKey().t1()))
+				continue;
+
 			// P(t)
 			double p = entry.getValue() / (double) freqSum;
 			stdDevSum += Math.pow(p - pAvg, 2.0);

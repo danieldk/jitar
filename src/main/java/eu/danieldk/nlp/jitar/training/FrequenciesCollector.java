@@ -135,7 +135,9 @@ public class FrequenciesCollector {
     }
 
     private void addUniGram(List<TaggedToken> sentence, int index) {
-        UniGram uniGram = new UniGram(lookupTag(sentence.get(index).tag()));
+        String tag = sentence.get(index).tag();
+        
+        UniGram uniGram = new UniGram(lookupTag(tag));
 
         if (!d_uniGrams.containsKey(uniGram))
             d_uniGrams.put(uniGram, 1);
