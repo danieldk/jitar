@@ -24,11 +24,6 @@ import java.util.List;
  * A corpus reader reads tagged tokens from a corpus.
  */
 public interface CorpusReader extends Closeable {
-    /**
-     * Close the reader.
-     *
-     * @throws IOException
-     */
     @Override
     public void close() throws IOException;
 
@@ -36,7 +31,7 @@ public interface CorpusReader extends Closeable {
      * Read a sentence.
      *
      * @return A list of tokens with tags, or <tt>null</tt> if the reader is exhausted.
-     * @throws IOException
+     * @throws IOException A problem occured while reading the sentence.
      */
     public List<TaggedToken> readSentence() throws IOException;
 }

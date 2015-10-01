@@ -28,7 +28,7 @@ import java.io.IOException;
 /**
  * Some helpful methods.
  *
- * @author Daniël de Kok <me@danieldk.eu>
+ * @author Daniël de Kok &lt;me@danieldk.eu&gt;
  */
 class Util {
     public static CorpusReader newCorpusReader(String corpusType, File corpus) throws IOException {

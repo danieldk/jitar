@@ -21,8 +21,8 @@ import java.util.Comparator;
 import java.util.Map.Entry;
 
 /**
- * This class implements a comparator for <i>Entry<String, Double></i> instances.
- * The order is descending on the entry value.
+ * This class implements a comparator for {@link Entry} instances parametrized
+ * over Integer, Double. The order is descending on the entry value.
  */
 public class ProbEntryComparator implements Comparator<Entry<Integer, Double>>,
 		Serializable {

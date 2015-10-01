@@ -33,6 +33,9 @@ public class BrownCorpusReader implements CorpusReader {
 
     /**
      * Construct a Brown-style corpus reader.
+     *
+     * @param reader                Reader over the corpus.
+     * @param decapitalizeFirstWord If true, the first word of each sentence is decapitalized.
      */
     public BrownCorpusReader(BufferedReader reader, boolean decapitalizeFirstWord) {
         this.reader = reader;

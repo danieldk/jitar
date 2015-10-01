@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Some commons corpus utilities.
  *
- * @author Daniël de Kok <me@danieldk.eu>
+ * @author Daniël de Kok &lt;me@danieldk.eu&gt;
  */
 public class Common {
     public static final String START_TOKEN = "<START>";

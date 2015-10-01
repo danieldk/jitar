@@ -58,7 +58,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <currentYear>2015</currentYear>
-        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
     </properties>
 
     <dependencies>

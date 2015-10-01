@@ -29,7 +29,7 @@ public interface LanguageModel {
 	 * Estimate the probability of a trigram, p(t3|t1,t2), and return
 	 * the logprob.
 	 * @param triGram t1,t2,t3
-	 * @return log(p(t3|t1,t2))
+	 * @return The trigram probability.
 	 */
 	double triGramProb(TriGram triGram);
 }

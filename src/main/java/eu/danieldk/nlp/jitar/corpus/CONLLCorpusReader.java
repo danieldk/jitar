@@ -32,6 +32,9 @@ public class CONLLCorpusReader implements CorpusReader {
 
     /**
      * Construct a CONLL corpus reader, use default start/end markers.
+     *
+     * @param reader                Reader over the corpus.
+     * @param decapitalizeFirstWord If true, the first word of each sentence is decapitalized.
      */
     public CONLLCorpusReader(BufferedReader reader, boolean decapitalizeFirstWord) {
         this.reader = reader;

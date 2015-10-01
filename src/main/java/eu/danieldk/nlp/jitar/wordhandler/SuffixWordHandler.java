@@ -18,7 +18,6 @@ package eu.danieldk.nlp.jitar.wordhandler;
 
 import eu.danieldk.nlp.jitar.corpus.Common;
 import eu.danieldk.nlp.jitar.data.Model;
-import eu.danieldk.nlp.jitar.data.UniGram;
 import eu.danieldk.nlp.jitar.data.util.ProbEntryComparator;
 
 import java.util.*;
@@ -38,12 +37,16 @@ public class SuffixWordHandler implements WordHandler {
      * frequency list for the corpus.
      *
      * @param model           The model.
+     * @param maxSuffixLength The maximum suffix length to consider.
      * @param upperMaxFreq    Uppercase words with a frequency lower than or equal
      *                        to this value will be used for suffix training.
      * @param lowerMaxFreq    Lowercase words with a frequency lower than or equal
      *                        to this value will be used for suffix training.
-     * @param dashMaxFreq
+     * @param dashMaxFreq     Words with a dash with a frequency lower than or equal
+     *                        to this value will be used for suffix training.
+     * @param maxTags         The maximum number of tags to return.
      * @param cardinalMaxFreq Cardinals with a frequency lower than or equal
+     *                        to this value will be used for suffix training.
      */
     public SuffixWordHandler(Model model, int maxSuffixLength, int upperMaxFreq,
                              int lowerMaxFreq, int dashMaxFreq, int maxTags, int cardinalMaxFreq) {

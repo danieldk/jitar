@@ -60,7 +60,7 @@ public class Model implements Serializable {
      * @param lexiconStream A lexicon stream.
      * @param nGramStream   A n-gram frequency stream.
      * @return A model.
-     * @throws IOException
+     * @throws IOException An error occurred while reading the model.
      */
     public static Model readModel(InputStream lexiconStream,
                                   InputStream nGramStream) throws IOException {
@@ -87,34 +87,34 @@ public class Model implements Serializable {
     }
 
     /**
+     * <p>
      * Read a model from files, and construct a <i>Model</i> instance. The
      * model should be stored in two text files. The first text file should
      * contain the word/tag frequencies. One line is used per word, each line
      * starts with the word, followed by tags and their frequencies. For
      * example:
-     * <p>
-     * <tt><pre>
+     * {@code
      * advised VBN 13 VBD 11
      * grotesque JJ 5
-     * </pre></tt>
+     * }
      * </p>
      * <p>
      * The second text file contains the uni/bi/trigram frequencies. Each
      * line lists an n-gram, and its frequencies. For example:
      * </p>
      * <p>
-     * <tt><pre>
+     * {@code
      * DT 6230
      * BEN PN$ 2
-     * </pre></tt>
+     * }
      * </p>
-     * <p/>
+     * <p>
      * Grams with a different <i>n</i> can be mixed freely.
      *
      * @param lexiconReader The lexicon reader.
      * @param nGramReader   The n-gram frequency reader.
      * @return The constructed <i>Model</i> instance.
-     * @throws IOException
+     * @throws IOException The model could not be read.
      */
     public static Model readModel(BufferedReader lexiconReader,
                                   BufferedReader nGramReader) throws IOException {

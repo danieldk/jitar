@@ -86,7 +86,7 @@ public class HMMTagger {
         /**
          * Return the probability of the sequence in log space.
          *
-         * @return log(p(w1..n))
+         * @return The log probability of the sequence.
          */
         public double logProb() {
             return d_logProb;
@@ -102,6 +102,7 @@ public class HMMTagger {
     /**
      * Construct an <i>HMMTagger</i> instance.
      *
+     * @param model         The tagging model.
      * @param wordHandler   The handler to be used for retrieving the probabilities
      *                      of a word given a tag.
      * @param languageModel The language model.
@@ -120,6 +121,7 @@ public class HMMTagger {
      * Extract the most probable sequence from a tag matrix.
      *
      * @param trellis The Viterbi trellis.
+     * @param model   The model.
      * @return The tag sequence with the highest probability.
      */
     public static Sequence highestProbabilitySequence(List<TrellisState> trellis,
@@ -163,6 +165,8 @@ public class HMMTagger {
 
     /**
      * Return the model used by the tagger.
+     *
+     * @return The model.
      */
     public Model model() {
         return d_model;
@@ -171,6 +175,7 @@ public class HMMTagger {
     /**
      * Tag a sentence.
      *
+     * @param sentence The sentence to tag.
      * @return The trellis.
      */
     public List<TrellisState> tag(List<String> sentence) {
