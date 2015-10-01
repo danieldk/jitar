@@ -132,7 +132,7 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>1.4</version>
                 <configuration>
-                    <keyname>1689FB2E</keyname>
+                    <keyname>A251F0D9</keyname>
                 </configuration>
                 <executions>
                     <execution>
