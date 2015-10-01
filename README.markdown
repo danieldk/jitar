@@ -73,6 +73,11 @@ API stability for a given *x* in *x.y.z* when *x >= 1*.
 ### 0.4.0 (Planned)
 
 * Use Dictomaton to store the lexicon and suffixes for unknown words.
+
+### 0.3.3
+
+* Fix a bug where the start/end markers could be used when handling unknown tokens (typically an unseen punctuation character). This change does **not** require retraining.
+* Add a utility *jitar-tag-conllx* to tag files that are in the CoNLL-X format. This preserves all other columns.
 * Compute interpolated scores only once.
 
 ### 0.3.0
