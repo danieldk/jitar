@@ -16,8 +16,8 @@
 
 package eu.danieldk.nlp.jitar.corpus;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 /**
@@ -25,44 +25,22 @@ import java.util.List;
  *
  * @author Daniël de Kok &lt;me@danieldk.eu&gt;
  */
-public class Common {
+public final class Common {
     public static final String START_TOKEN = "<START>";
 
     public static final String END_TOKEN = "<END>";
 
-    public static List<TaggedToken> DEFAULT_END_MARKERS = Collections.unmodifiableList(getEndMarkers());
+    public static List<TaggedToken> DEFAULT_END_MARKERS = ImmutableList.of(new TaggedToken(END_TOKEN, END_TOKEN));
 
-    public static List<String> DEFAULT_END_MARKER_TOKENS = Collections.unmodifiableList(getEndMarkerTokens());
+    public static List<String> DEFAULT_END_MARKER_TOKENS = ImmutableList.of(END_TOKEN);
 
-    public static List<TaggedToken> DEFAULT_START_MARKERS = Collections.unmodifiableList(getStartMarkers());
+    public static List<TaggedToken> DEFAULT_START_MARKERS = ImmutableList.of(
+            new TaggedToken(START_TOKEN, START_TOKEN),
+            new TaggedToken(START_TOKEN, START_TOKEN)
+    );
 
-    public static List<String> DEFAULT_START_MARKER_TOKENS = Collections.unmodifiableList(getStartMarkerTokens());
+    public static List<String> DEFAULT_START_MARKER_TOKENS = ImmutableList.of(START_TOKEN, START_TOKEN);
 
-    private static List<TaggedToken> getEndMarkers() {
-        List<TaggedToken> endMarkers = new ArrayList<>();
-        endMarkers.add(new TaggedToken(END_TOKEN, END_TOKEN));
-        return endMarkers;
+    private Common() {
     }
-
-    private static List<String> getEndMarkerTokens() {
-        List<String> endMarkers = new ArrayList<>();
-        endMarkers.add(END_TOKEN);
-        return endMarkers;
-    }
-
-    private static List<TaggedToken> getStartMarkers() {
-        List<TaggedToken> startMarkers = new ArrayList<>();
-        startMarkers.add(new TaggedToken(START_TOKEN, START_TOKEN));
-        startMarkers.add(new TaggedToken(START_TOKEN, START_TOKEN));
-        return startMarkers;
-    }
-
-    private static List<String> getStartMarkerTokens() {
-        List<String> startMarkers = new ArrayList<>();
-        startMarkers.add(START_TOKEN);
-        startMarkers.add(START_TOKEN);
-        return startMarkers;
-    }
-
-    private Common() {}
 }
